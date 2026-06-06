@@ -1,0 +1,78 @@
+<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- ICU Room Outline -->
+  <rect x="10" y="10" width="980" height="580" fill="#f9f9f9" stroke="black" stroke-width="2"/>
+
+  <!-- Door (Left Center) -->
+  <rect x="10" y="270" width="20" height="60" fill="#8B4513" />
+  <text x="12" y="305" font-size="12" fill="white" transform="rotate(-90 12,305)">Door</text>
+
+  <!-- Nursing Station (Center) -->
+  <rect x="400" y="200" width="200" height="200" fill="#cce5ff" stroke="black"/>
+  <text x="440" y="220" font-size="16" fill="black">Nursing Station</text>
+
+  <!-- Nurses Inside Nursing Station -->
+  <circle cx="430" cy="270" r="15" fill="#ff9999" />
+  <text x="420" y="275" font-size="10" fill="black">Nurse A</text>
+
+  <circle cx="480" cy="270" r="15" fill="#99ff99" />
+  <text x="470" y="275" font-size="10" fill="black">Nurse B</text>
+
+  <circle cx="530" cy="270" r="15" fill="#9999ff" />
+  <text x="520" y="275" font-size="10" fill="black">Nurse C</text>
+
+  <circle cx="455" cy="320" r="15" fill="#ffff99" />
+  <text x="445" y="325" font-size="10" fill="black">Nurse D</text>
+
+  <circle cx="505" cy="320" r="15" fill="#ff99ff" />
+  <text x="495" y="325" font-size="10" fill="black">Nurse E</text>
+
+  <!-- Beds - Top Wall (5 beds) -->
+  <rect x="150" y="30" width="60" height="30" fill="#ffcccc" stroke="black"/>
+  <text x="160" y="50" font-size="12">Bed 1</text>
+
+  <rect x="250" y="30" width="60" height="30" fill="#ffcccc" stroke="black"/>
+  <text x="260" y="50" font-size="12">Bed 2</text>
+
+  <rect x="350" y="30" width="60" height="30" fill="#ccffcc" stroke="black"/>
+  <text x="360" y="50" font-size="12">Bed 3</text>
+
+  <rect x="550" y="30" width="60" height="30" fill="#ccffcc" stroke="black"/>
+  <text x="560" y="50" font-size="12">Bed 4</text>
+
+  <rect x="650" y="30" width="60" height="30" fill="#ccccff" stroke="black"/>
+  <text x="660" y="50" font-size="12">Bed 5</text>
+
+  <!-- Beds - Right Wall (5 beds) -->
+  <rect x="920" y="100" width="30" height="60" fill="#ccccff" stroke="black"/>
+  <text x="960" y="130" font-size="12">Bed 6</text>
+
+  <rect x="920" y="180" width="30" height="60" fill="#ffffcc" stroke="black"/>
+  <text x="960" y="210" font-size="12">Bed 7</text>
+
+  <rect x="920" y="260" width="30" height="60" fill="#ffffcc" stroke="black"/>
+  <text x="960" y="290" font-size="12">Bed 8</text>
+
+  <rect x="920" y="340" width="30" height="60" fill="#ffccff" stroke="black"/>
+  <text x="960" y="370" font-size="12">Bed 9</text>
+
+  <rect x="920" y="420" width="30" height="60" fill="#ffccff" stroke="black"/>
+  <text x="960" y="450" font-size="12">Bed 10</text>
+
+  <!-- Beds - Bottom Wall (5 beds) -->
+  <rect x="150" y="540" width="60" height="30" fill="#ffcccc" stroke="black"/>
+  <text x="160" y="560" font-size="12">Bed 11</text>
+
+  <rect x="250" y="540" width="60" height="30" fill="#ccffcc" stroke="black"/>
+  <text x="260" y="560" font-size="12">Bed 12</text>
+
+  <rect x="350" y="540" width="60" height="30" fill="#ccccff" stroke="black"/>
+  <text x="360" y="560" font-size="12">Bed 13</text>
+
+  <rect x="550" y="540" width="60" height="30" fill="#ffffcc" stroke="black"/>
+  <text x="560" y="560" font-size="12">Bed 14</text>
+
+  <rect x="650" y="540" width="60" height="30" fill="#ffccff" stroke="black"/>
+  <text x="660" y="560" font-size="12">Bed 15</text>
+
+</svg>

@@ -1,0 +1,7 @@
+{
+  "name": "NurseApp",
+  "displayName": "NurseApp",
+  "android": {
+    "package": "com.itouchnurseapps"
+  }
+}

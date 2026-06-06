@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <rect x="10" y="10" width="980" height="580" fill="#f9f9f9" stroke="black" stroke-width="2"/>
+
+  <!-- Door -->
+  <rect x="10" y="270" width="30" height="80" fill="#8B4513"/>
+  <text x="1" y="318" font-size="16" fill="white" transform="rotate(-90 12,305)">Door</text>
+
+  <!-- Nursing Station -->
+  <g>
+    <rect x="850" y="230" width="120" height="150" fill="#cce5ff" stroke="black"/>
+    <text x="875" y="270" font-size="12" fill="black">Nursing Station</text>
+  </g>
+
+  <circle cx="880" cy="320" r="20" fill="#ccc" id="nurse-1"/>
+  <text x="865" y="325" font-size="10" fill="black">Nurse 1</text>
+
+  <circle cx="940" cy="320" r="20" fill="#ccc" id="nurse-2"/>
+  <text x="925" y="325" font-size="10" fill="black">Nurse 2</text>
+
+  <!-- Dashed horizontal lines -->
+  <line x1="40" y1="145" x2="960" y2="145" stroke="black" stroke-dasharray="4"/>
+  <line x1="40" y1="455" x2="960" y2="455" stroke="black" stroke-dasharray="4"/>
+
+  <!-- Beds B1 to B6 (Top) -->
+  <!-- Example group for Bed 1 -->
+  <g>
+    <rect x="60" y="30" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B1"/>
+    <rect x="70" y="50" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="85" y="62" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B1</text>
+  </g>
+
+  <g>
+    <rect x="200" y="30" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B2"/>
+    <rect x="210" y="50" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="225" y="62" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B2</text>
+  </g>
+
+  <g>
+    <rect x="340" y="30" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B3"/>
+    <rect x="350" y="50" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="365" y="62" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B3</text>
+  </g>
+
+  <g>
+    <rect x="480" y="30" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B4"/>
+    <rect x="490" y="50" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="505" y="62" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B4</text>
+  </g>
+
+  <g>
+    <rect x="620" y="30" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B5"/>
+    <rect x="630" y="50" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="645" y="62" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B5</text>
+  </g>
+
+  <g>
+    <rect x="760" y="30" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B6"/>
+    <rect x="770" y="50" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="785" y="62" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B6</text>
+  </g>
+
+  <!-- Vertical dashed lines for top -->
+  <line x1="150" y1="30" x2="150" y2="145" stroke="black" stroke-dasharray="4"/>
+  <line x1="290" y1="30" x2="290" y2="145" stroke="black" stroke-dasharray="4"/>
+  <line x1="430" y1="30" x2="430" y2="145" stroke="black" stroke-dasharray="4"/>
+  <line x1="570" y1="30" x2="570" y2="145" stroke="black" stroke-dasharray="4"/>
+  <line x1="710" y1="30" x2="710" y2="145" stroke="black" stroke-dasharray="4"/>
+
+  <!-- Beds B7 to B12 (Bottom) -->
+  <g>
+    <rect x="60" y="470" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B7"/>
+    <rect x="70" y="550" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="85" y="562" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B7</text>
+  </g>
+
+  <g>
+    <rect x="200" y="470" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B8"/>
+    <rect x="210" y="550" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="225" y="562" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B8</text>
+  </g>
+
+  <g>
+    <rect x="340" y="470" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B9"/>
+    <rect x="350" y="550" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="365" y="562" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B9</text>
+  </g>
+
+  <g>
+    <rect x="480" y="470" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B10"/>
+    <rect x="490" y="550" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="505" y="562" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B10</text>
+  </g>
+
+  <g>
+    <rect x="620" y="470" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B11"/>
+    <rect x="630" y="550" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="645" y="562" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B11</text>
+  </g>
+
+  <g>
+    <rect x="760" y="470" width="50" height="100" fill="#e0f7fa" rx="5" ry="5" stroke="black" id="APOLLOORG1H1B12"/>
+    <rect x="770" y="550" width="40" height="17" fill="#A9A9A9" rx="3"/>
+    <text x="785" y="562" font-size="10" fill="white" text-anchor="middle" alignment-baseline="middle">B12</text>
+  </g>
+
+  <!-- Vertical dashed lines for bottom -->
+  <line x1="150" y1="455" x2="150" y2="570" stroke="black" stroke-dasharray="4"/>
+  <line x1="290" y1="455" x2="290" y2="570" stroke="black" stroke-dasharray="4"/>
+  <line x1="430" y1="455" x2="430" y2="570" stroke="black" stroke-dasharray="4"/>
+  <line x1="570" y1="455" x2="570" y2="570" stroke="black" stroke-dasharray="4"/>
+  <line x1="710" y1="455" x2="710" y2="570" stroke="black" stroke-dasharray="4"/>
+</svg>
+
