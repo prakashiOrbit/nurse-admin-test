@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Text } from 'react-native';
 import Svg from 'react-native-svg';
 import { parseSvgXml } from './svg-parser';
@@ -23,6 +24,7 @@ const DynamicSvgRenderer: React.FC<DynamicSvgRendererProps> = ({
   errorComponent = defaultErrorComponent,
   ...props
 }) => {
+  const { t } = useTranslation();
   const [jsxTree, setJsxTree] = useState<React.ReactNode | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,7 +44,7 @@ const DynamicSvgRenderer: React.FC<DynamicSvgRendererProps> = ({
         setJsxTree(enhanced);
       } catch (err) {
         console.error('Failed to parse SVG:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load SVG');
+        setError(err instanceof Error ? err.message : t('common.failed_to_load_svg'));
       } finally {
         setLoading(false);
       }

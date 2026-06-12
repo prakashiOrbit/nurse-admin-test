@@ -4,6 +4,7 @@ import VitalCard from './VitalCard';
 import {scale, verticalScale} from 'react-native-size-matters';
 import {getVitalRecordsAPI} from '../../../services/telemetryService';
 import {formatDateWithOffset} from '../../../utils/dataformatter';
+import {useTranslation} from 'react-i18next';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -25,6 +26,7 @@ const VitalsPanelRight: React.FC<VitalsPanelRightProps> = ({
   source,
   raisedTime,
 }) => {
+  const {t} = useTranslation();
   console.log("datatimestamp: "+raisedTime)
   const [vitals, setVitals] = useState({});
 
@@ -166,7 +168,7 @@ const VitalsPanelRight: React.FC<VitalsPanelRightProps> = ({
           )
         ) : (
           <View style={styles.errorContainer}>
-            <Text>No vital parameters to display</Text>
+            <Text>{t('monitoring.no_vital_parameters')}</Text>
           </View>
         )}
       </View>

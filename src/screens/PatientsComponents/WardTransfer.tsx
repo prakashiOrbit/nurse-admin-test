@@ -6,6 +6,7 @@ import { getAllEmptyBeds, wardtransfer, dischargePatient } from '../../services/
 import Toast from 'react-native-toast-message';
 import { startMonitoring, stopMonitoring, checkMonitoring, getAssignedDevicesAPI } from '../../services/deviceService';
 import { fontScale, scale, verticalScale } from "../../utils/scaling";
+import { useTranslation } from "react-i18next";
 
 type WardTransferProps = {
     assignedDevices: any[];
@@ -22,6 +23,7 @@ const WardTransfer: React.FC<WardTransferProps> = ({
   patientCode,
   currentBedCode
 }) => {
+  const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState<"WardTransfer" | "Discharge">(
     "WardTransfer"
   );
@@ -55,12 +57,12 @@ const WardTransfer: React.FC<WardTransferProps> = ({
   const handleProceed = async () => {
     try {
         if (selectedDevices.length > 0) {
-        Alert.alert("Monitoring Active", "Please stop monitoring of all devices before transferring.");
+        Alert.alert(t(‘monitoring.active’), t(‘ward_transfer_modal.stop_devices_msg’));
         return;
       }
       if (selectedTab === "WardTransfer") {
         if (!selectedWard || !selectedBed) {
-          Alert.alert("Error", "Please select both Ward and Bed");
+          Alert.alert(t(‘common.error’), t(‘ward_transfer_modal.error_select_ward_bed’));
           return;
         }
 
@@ -71,18 +73,17 @@ const WardTransfer: React.FC<WardTransferProps> = ({
         };
 
         const res = await wardtransfer(payload);
-        Alert.alert("Success", "Patient transferred successfully!");
+        Alert.alert(t(‘common.success’), t(‘ward_transfer_modal.success_transfer’));
         console.log("Ward transfer success:", res);
 
       } else if (selectedTab === "Discharge") {
-        // placeholder discharge API (you’ll replace later)
         const res = await dischargePatient({ patientCode, currentBedCode });
-        Alert.alert("Success", "Patient discharged successfully!");
+        Alert.alert(t(‘common.success’), t(‘ward_transfer_modal.success_discharge’));
         console.log("Discharge success:", res);
       }
     } catch (err: any) {
       console.error("Error on proceed:", err);
-      Alert.alert("Error", err.message || "Something went wrong");
+      Alert.alert(t(‘common.error’), err.message || t(‘common.something_went_wrong’));
     }
   };
 
@@ -165,42 +166,38 @@ useEffect(() => {
   const handleStartMonitoring = async (deviceCode: string) => {
     const data = { deviceCode };
     try {
-      const response = await startMonitoring(data);
+      await startMonitoring(data);
       Toast.show({
-        text1: 'Start Monitoring Success',
-        text2: JSON.stringify(response),
+        text1: t('monitoring.start_success'),
         type: 'success',
       });
-      Alert.alert('Monitoring Started', `Device ${deviceCode} is now being monitored.`);
+      Alert.alert(t('monitoring.started'), t('monitoring.started_msg', {deviceCode}));
     } catch (error) {
       console.error('Error starting monitoring:', error);
       Toast.show({
-        text1: 'Start Monitoring Failed',
-        text2: JSON.stringify(error),
+        text1: t('monitoring.start_failed'),
         type: 'error',
       });
-      Alert.alert('Error', `Failed to start monitoring for device ${deviceCode}.`);
+      Alert.alert(t('common.error'), t('monitoring.start_failed_msg', {deviceCode}));
     }
   };
-  
+
   const handleStopMonitoring = async (deviceCode: string) => {
     const data = { deviceCode };
     try {
-      const response = await stopMonitoring(data);
+      await stopMonitoring(data);
       Toast.show({
-        text1: 'Stop Monitoring Success',
-        text2: JSON.stringify(response),
+        text1: t('monitoring.stop_success'),
         type: 'success',
       });
-      Alert.alert('Monitoring Stopped', `Device ${deviceCode} monitoring has been stopped.`);
+      Alert.alert(t('monitoring.stopped'), t('monitoring.stopped_msg', {deviceCode}));
     } catch (error) {
       console.error('Error stopping monitoring:', error);
       Toast.show({
-        text1: 'Stop Monitoring Failed',
-        text2: JSON.stringify(error),
+        text1: t('monitoring.stop_failed'),
         type: 'error',
       });
-      Alert.alert('Error', `Failed to stop monitoring for device ${deviceCode}.`);
+      Alert.alert(t('common.error'), t('monitoring.stop_failed_msg', {deviceCode}));
     }
   };
 
@@ -221,7 +218,7 @@ useEffect(() => {
               selectedTab === "WardTransfer" && styles.activeTabText,
             ]}
           >
-            Ward Transfer
+            {t('ward_transfer_modal.tab_transfer')}
           </Text>
         </TouchableOpacity>
 
@@ -238,13 +235,13 @@ useEffect(() => {
               selectedTab === "Discharge" && styles.activeTabText,
             ]}
           >
-            Send to Discharge
+            {t('ward_transfer_modal.tab_discharge')}
           </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.deviceParent}>
         <View style={styles.deviceLeft}>
-          <Text style={styles.sectionTitle}>Stop Assigned Devices:</Text>
+          <Text style={styles.sectionTitle}>{t('monitoring.stop_assigned_devices')}</Text>
           <View style={styles.deviceListWrapper}>
                         <Animated.ScrollView
                           style={styles.scrollArea}
@@ -294,7 +291,7 @@ useEffect(() => {
                               </View>
                             </View>
                           ) : (
-                            <Text>No devices assigned to this patient</Text>
+                            <Text>{t('monitoring.no_devices')}</Text>
                           )}
                         </Animated.ScrollView>
           
@@ -312,18 +309,18 @@ useEffect(() => {
         </View>
         {selectedTab === "WardTransfer" ? (
           <View style={styles.deviceRight}>
-            <Text style={styles.sectionTitle}>Transfer To:</Text>
+            <Text style={styles.sectionTitle}>{t('ward_transfer_modal.transfer_to')}</Text>
 
             {/* Ward Picker */}
             <View style={styles.row}>
-              <Text style={styles.label}>Target Ward:</Text>
+              <Text style={styles.label}>{t('ward_transfer_modal.target_ward')}</Text>
               <View style={styles.dropdown}>
                 <Picker
                   style={styles.picker}
                   selectedValue={selectedWard}
                   onValueChange={(itemValue) => setSelectedWard(itemValue)}
                 >
-                  <Picker.Item label="Select" value="" style={styles.pickerItem} />
+                  <Picker.Item label={t('ward_transfer_modal.select')} value="" style={styles.pickerItem} />
                   {wards.map((ward: any) => (
                     <Picker.Item
                       key={ward.wardCode}
@@ -338,14 +335,14 @@ useEffect(() => {
 
             {/* Bed Picker */}
             <View style={styles.row}>
-              <Text style={styles.label}>Target Bed:</Text>
+              <Text style={styles.label}>{t('ward_transfer_modal.target_bed')}</Text>
               <View style={styles.dropdown}>
               <Picker
                 style={styles.picker}
                 selectedValue={selectedBed}
                 onValueChange={(itemValue) => setSelectedBed(itemValue)}
               >
-                <Picker.Item label="Select" value="" style={styles.pickerItem} />
+                <Picker.Item label={t('ward_transfer_modal.select')} value="" style={styles.pickerItem} />
                 {beds.map((bed: any) => (
                   <Picker.Item
                     key={bed.bedCode}
@@ -364,7 +361,7 @@ useEffect(() => {
       </View>
         <View style={styles.btncontainer}>
           <TouchableOpacity style={styles.proceedBtn} onPress={handleProceed}>
-            <Text style={styles.text}>Proceed</Text>
+            <Text style={styles.text}>{t('ward_transfer_modal.proceed')}</Text>
             <Text style={styles.arrow}>→</Text>
           </TouchableOpacity>
         </View>

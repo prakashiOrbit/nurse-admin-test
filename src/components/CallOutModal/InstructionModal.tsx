@@ -16,6 +16,7 @@ import {
 import PatientInstructions from '../../screens/PatientsComponents/PatientInstructions';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
+import { useTranslation } from 'react-i18next';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { scale, verticalScale } from 'react-native-size-matters';
 
@@ -34,6 +35,7 @@ const InstructionModal: React.FC<Props> = ({
   onClose,
   patientCode,
 }) => {
+  const { t } = useTranslation();
   const { isTablet, wp, hp } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
   const titleStyle = useMemo(
@@ -76,7 +78,7 @@ const InstructionModal: React.FC<Props> = ({
           {/* Header */}
           <View style={styles.headerRow}>
             <Image source={InstructionsVector} style={styles.icon} />
-            <Text style={titleStyle}>Instructions</Text>
+            <Text style={titleStyle}>{t('common.instructions')}</Text>
 
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Text style={shared.closeText}>✕</Text>

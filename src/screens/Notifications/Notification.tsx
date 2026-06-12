@@ -28,6 +28,7 @@ import { AlarmConfirmModal } from '../../components/CallOutModal/AlarmConfirmMod
 import { AlarmDetailFullDTO } from '../../types/Types';
 import { AlarmInputModal } from '../../components/CallOutModal/AlarmInputModal';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 import { scale, verticalScale } from 'react-native-size-matters';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
@@ -53,6 +54,7 @@ const formatRaisedTime = (ms: number): string => {
 
 export const Notification = forwardRef(
   ({ sessionReady }: { sessionReady: boolean }, ref) => {
+    const { t } = useTranslation();
     const { isTablet, wp, hp } = useResponsive();
 
     const panelWidth = useRef(new Animated.Value(DEFAULT_WIDTH)).current;
@@ -92,8 +94,8 @@ export const Notification = forwardRef(
         setShowCallout(false);
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: 'Notification Information Not Found.',
+          text1: t('common.error'),
+          text2: t('notifications.not_found_msg'),
         });
       }
     };

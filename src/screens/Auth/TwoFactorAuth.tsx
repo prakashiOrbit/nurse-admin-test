@@ -11,6 +11,7 @@ import {
   useWindowDimensions,
   Pressable,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -56,6 +57,7 @@ type Styles = {
 };
 
 const TwoFactorAuth: React.FC = () => {
+  const { t } = useTranslation();
   const backButton = require('../../../assets/icons/back-arrow2.png');
   const appLogo = require('../../../assets/images/nurse_img.png');
 
@@ -271,14 +273,14 @@ const TwoFactorAuth: React.FC = () => {
 
       Toast.show({
         type: 'success',
-        text1: 'OTP Sent',
-        text2: 'A new OTP has been sent successfully.',
+        text1: t('otp.otp_sent'),
+        text2: t('otp.otp_sent_msg'),
       });
     } catch {
       Toast.show({
         type: 'error',
-        text1: 'Failed',
-        text2: 'Unable to resend OTP.',
+        text1: t('otp.resend_failed'),
+        text2: t('otp.resend_failed_msg'),
       });
     } finally {
       setIsResending(false);
@@ -331,10 +333,10 @@ const TwoFactorAuth: React.FC = () => {
     try {
       const otpValue = otp.join('');
       if (!otpValue.length) {
-        setError('*Please enter the OTP');
+        setError(t('otp.error_enter_otp'));
         return;
       } else if (otpValue.length < OTP_LENGTH) {
-        setError('*Please enter the complete OTP');
+        setError(t('otp.error_complete_otp'));
         return;
       }
       if (isFirstFactor) {
@@ -342,8 +344,8 @@ const TwoFactorAuth: React.FC = () => {
 
         Toast.show({
           type: 'success',
-          text1: 'Verification Successful',
-          text2: 'Please login again to continue.',
+          text1: t('otp.verification_successful'),
+          text2: t('otp.verification_successful_msg'),
         });
 
         await AsyncStorage.multiRemove(['authFlow']);
@@ -403,16 +405,16 @@ const TwoFactorAuth: React.FC = () => {
       const message = err?.response?.data?.message || err?.response?.data || '';
 
       if (message?.toLowerCase().includes('invalid')) {
-        setError('*Incorrect OTP');
+        setError(t('otp.incorrect_otp'));
       } else if (message?.toLowerCase().includes('new otp has been sent')) {
         setOtp(Array(OTP_LENGTH).fill(''));
 
         inputsRef.current[0]?.focus();
-        setError('*OTP expired. New OTP sent to email.');
+        setError(t('otp.otp_expired_new'));
       } else if (message?.toLowerCase().includes('expired')) {
-        setError('*OTP expired. Please request a new one.');
+        setError(t('otp.otp_expired'));
       } else {
-        setError('*Something went wrong. Please try again.');
+        setError(t('otp.something_went_wrong'));
       }
     }
   };
@@ -459,12 +461,10 @@ const TwoFactorAuth: React.FC = () => {
       <View style={[styles.leftPanel, leftpanelStyle]}>
         <Image source={appLogo} style={imageStyles} resizeMode="contain" />
         <Text style={descriptionStyle}>
-          An ICU app for nurses to monitor real-time vitals, receive doctor
-          instructions, manage shift handovers and respond quickly to critical
-          alerts for safer patient care.
+          {t('auth.app_description')}
         </Text>
         <View style={styles.leftBottom}>
-          <Text style={leftBottomText}>Powered by</Text>
+          <Text style={leftBottomText}>{t('common.powered_by')}</Text>
           <Image
             source={Images.iorbitLogo}
             style={orgLogoStyle}
@@ -481,16 +481,16 @@ const TwoFactorAuth: React.FC = () => {
             resizeMode="contain"
           />
           <View>
-            <Text style={headerWelcome}>Welcome to</Text>
-            <Text style={headerAppName}>iTouch Nurse !</Text>
+            <Text style={headerWelcome}>{t('auth.welcome_to')}</Text>
+            <Text style={headerAppName}>{t('auth.app_title')} !</Text>
           </View>
         </View>
 
         <View style={{ alignItems: 'center' }}>
           <Text style={emailInstructionStyle}>
             {isFirstFactor
-              ? 'Please enter verification code sent to:'
-              : 'Please enter 6 digit OTP sent to:'}
+              ? t('otp.prompt_verification')
+              : t('otp.prompt')}
           </Text>
 
           <View style={styles.editMessageTextCentered}>
@@ -501,7 +501,7 @@ const TwoFactorAuth: React.FC = () => {
             </Text>
 
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Text style={editTextStyle}> Edit</Text>
+              <Text style={editTextStyle}> {t('otp.edit')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -531,7 +531,7 @@ const TwoFactorAuth: React.FC = () => {
         {!isFirstFactor && (
           <View style={styles.resendRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={resendTextStyle}>Didn't receive any OTP? </Text>
+              <Text style={resendTextStyle}>{t('otp.didnt_receive')}</Text>
 
               <TouchableOpacity
                 onPress={handleResendOtp}
@@ -547,7 +547,7 @@ const TwoFactorAuth: React.FC = () => {
                     },
                   ]}
                 >
-                  Resend OTP
+                  {t('otp.resend_otp')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -556,7 +556,7 @@ const TwoFactorAuth: React.FC = () => {
         {/* {error ? <Text style={styles.errorText}>{error}</Text> : null} */}
 
         <TouchableOpacity style={styles.loginButton} onPress={handleVerifyOtp}>
-          <Text style={styles.loginText}>Verify OTP</Text>
+          <Text style={styles.loginText}>{t('otp.verify_otp')}</Text>
         </TouchableOpacity>
         {/* <Pressable
           style={googleButtonStyle}

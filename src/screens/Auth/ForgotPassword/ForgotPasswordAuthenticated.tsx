@@ -24,6 +24,7 @@ import {
 import Loader from '../../../components/Loader';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { getSharedStyles } from '../../../styles/sharedStyles';
+import { useTranslation } from 'react-i18next';
 
 const BackButtonImg = require('../../../../assets/icons/back-arrow2.png');
 
@@ -39,6 +40,7 @@ const ForgotPasswordAuthenticated: React.FC = () => {
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''));
   const inputsRef = useRef<Array<TextInput | null>>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { t } = useTranslation();
   const { wp, hp, isTablet, width, height } = useResponsive();
   const [emailAddress, setEmailAddress] = useState<string | null>(null);
 
@@ -238,27 +240,25 @@ const emailInstructionStyle = useMemo(
       ) {
         Toast.show({
           type: 'success',
-          text1: 'OTP sent successfully',
+          text1: t('forgot_password.otp_sent'),
           position: 'top',
         });
-        // navigation.replace('VerfyForgotOTP', { email });
       }
 
       return true;
-      // optionally show toast / start timer / enable OTP inputs
     } catch (err: any) {
       console.error('Failed to send OTP');
-      if (err.response?.data?.message.contains('User not found')) {
+      if (err.response?.data?.message?.includes('User not found')) {
         Toast.show({
           type: 'error',
-          text1: 'User not found.',
+          text1: t('forgot_password.user_not_found'),
           position: 'top',
         });
         return false;
       }
       Toast.show({
         type: 'error',
-        text1: 'Failed to send OTP. Please try again.',
+        text1: t('forgot_password.otp_send_failed'),
         position: 'top',
       });
       return false;
@@ -272,8 +272,8 @@ const emailInstructionStyle = useMemo(
       if (response?.code === '555') {
         Toast.show({
           type: 'success',
-          text1: 'OTP verified successfully',
-          text2: 'You can now reset your password',
+          text1: t('forgot_password.otp_verified'),
+          text2: t('forgot_password.otp_verified_msg'),
           position: 'top',
         });
         navigation.navigate('SetNewPasswordAuthenticated', {
@@ -288,8 +288,8 @@ const emailInstructionStyle = useMemo(
       if (message?.toLowerCase().includes('invalid')) {
         Toast.show({
           type: 'error',
-          text1: 'Invalid OTP',
-          text2: 'Please try again',
+          text1: t('forgot_password.invalid_otp'),
+          text2: t('forgot_password.invalid_otp_msg'),
           position: 'top',
         });
       }
@@ -309,7 +309,7 @@ const emailInstructionStyle = useMemo(
           <Image source={BackButtonImg} style={styles.backButtonImage} />
         </View>
 
-        <Text style={headerTitleStyle}>Forgot current Password?</Text>
+        <Text style={headerTitleStyle}>{t('change_password_auth.forgot_current_password')}</Text>
       </View>
       <KeyboardAvoidingView
         style={styles.rightContainer}
@@ -325,7 +325,7 @@ const emailInstructionStyle = useMemo(
           >
             <View>
               <Text style={emailInstructionStyle}>
-                Please enter 6 digit OTP sent to:{' '}
+                {t('otp.prompt')}{' '}
                 <Text style={emailBoldStyle}>
                   {encryptEmail(emailAddress?.toString() || '')}
                 </Text>
@@ -366,7 +366,7 @@ const emailInstructionStyle = useMemo(
             </View>
             <View style={styles.resendContainer}>
               <Text style={resendTextStyle}>
-                Didn’t receive any OTP?{' '}
+                {t(‘otp.didnt_receive’)}
                 <Text
                   style={[
                     resendTextStyle,
@@ -389,7 +389,7 @@ const emailInstructionStyle = useMemo(
                     } catch (e) {
                       Toast.show({
                         type: 'error',
-                        text1: 'Failed to resend OTP',
+                        text1: t('otp.failed_resend'),
                         position: 'top',
                       });
                     } finally {
@@ -397,7 +397,7 @@ const emailInstructionStyle = useMemo(
                     }
                   }}
                 >
-                  Resend OTP
+                  {t('otp.resend_otp')}
                 </Text>
               </Text>
             </View>
@@ -417,7 +417,7 @@ const emailInstructionStyle = useMemo(
                   if (otp.some(digit => digit === '')) {
                     Toast.show({
                       type: 'error',
-                      text1: 'Please enter complete OTP',
+                      text1: t('otp.enter_complete_otp'),
                       position: 'top',
                     });
                     return;
@@ -434,18 +434,18 @@ const emailInstructionStyle = useMemo(
                     const message = error?.response?.data?.message;
 
                     if (message?.toLowerCase().includes('invalid')) {
-                      setOtpError('*Incorrect OTP');
+                      setOtpError(t('otp.incorrect_otp'));
                     } else if (message?.toLowerCase().includes('expired')) {
-                      setOtpError('*OTP expired. Please request a new one.');
+                      setOtpError(t('otp.otp_expired'));
                     } else {
-                      setOtpError('*Something went wrong. Please try again.');
+                      setOtpError(t('otp.something_went_wrong'));
                     }
                   } finally {
                     setLoading(false);
                   }
                 }}
               >
-                <Text style={loginTextStyle}>Verify OTP</Text>
+                <Text style={loginTextStyle}>{t('otp.verify_otp')}</Text>
               </Pressable>
             </View>
             {/* <View style={styles.cancelButton} onTouchEnd={onBackPress}>

@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RFValue } from 'react-native-responsive-fontsize';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 import type { RootStackParamList } from '../../navigation/AppNavigator';
 import { fontScale, scale, verticalScale } from '../../utils/scaling';
@@ -32,6 +33,7 @@ type SplashNavigation = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 type SplashDestination = 'Dashboard' | 'NurseLogin';
 
 const SplashScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation<SplashNavigation>();
   const { width, height } = useWindowDimensions();
   const [activeStep, setActiveStep] = useState(0);
@@ -144,16 +146,16 @@ const SplashScreen = () => {
       />
       <View style={styles.content}>
         <Animated.Text style={[styles.title, { color: contentTextColor }]}>
-          iTouch Nurse
+          {t('auth.app_title')}
         </Animated.Text>
         <Animated.Text style={[styles.subtitle, { color: contentTextColor }]}>
-          An ISO 13485 Secured Application
+          {t('splash.subtitle')}
         </Animated.Text>
         <View style={styles.poweredByRow}>
           <Animated.Text
             style={[styles.poweredByText, { color: contentTextColor }]}
           >
-            Powered by
+            {t('common.powered_by')}
           </Animated.Text>
           <Image source={iorbitLogo} resizeMode="contain" style={styles.logo} />
         </View>

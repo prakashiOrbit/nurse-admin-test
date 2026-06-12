@@ -26,6 +26,7 @@ import CalloutHeader from '../../components/CalloutHeader';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
 import { scale, verticalScale } from 'react-native-size-matters';
+import { useTranslation } from 'react-i18next';
 const iconImg = require('../images/img.png');
 const MonitoringVector = require('../../../assets/icons/monitoring.png');
 const InstructionsVector = require('../../../assets/icons/instruction.png');
@@ -73,6 +74,7 @@ const MonitoringScreen: React.FC<MonitoringScreenProps> = ({
   const [selectedTab, setSelectedTab] = useState<
     'instructions' | 'moveout' | 'delegate' | 'monitoring'
   >('monitoring');
+  const { t } = useTranslation();
   const { isTablet, wp, hp } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
   useEffect(() => {
@@ -262,9 +264,9 @@ const MonitoringScreen: React.FC<MonitoringScreenProps> = ({
                     resizeMode="contain"
                   />
                   {source === 'ALARM' ? (
-                    <Text style={styles.boxText}>Live Monitor</Text>
+                    <Text style={styles.boxText}>{t('monitoring.live_monitor')}</Text>
                   ) : (
-                    <Text style={styles.boxText}>Alarm graph</Text>
+                    <Text style={styles.boxText}>{t('monitoring.alarm_graph')}</Text>
                   )}
                 </TouchableOpacity>
               )}
@@ -283,7 +285,7 @@ const MonitoringScreen: React.FC<MonitoringScreenProps> = ({
                   resizeMode="contain"
                   tintColor={'#ffff'}
                 />
-                <Text style={styles.boxText}>Instructions</Text>
+                <Text style={styles.boxText}>{t('common.instructions')}</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -11,6 +11,7 @@ import {
   Image,
 } from 'react-native';
 import { fontScale, scale, verticalScale } from '../../../../utils/scaling';
+import { useTranslation } from 'react-i18next';
 import Toast from 'react-native-toast-message';
 import { useResponsive } from '../../../../utils/responsive';
 import { getSharedStyles } from '../../../../styles/sharedStyles';
@@ -44,6 +45,7 @@ const SharedChangePassword: React.FC<SharedChangePasswordProps> = ({
   const [confirmPasswordVisibility, setConfirmPasswordVisibility] =
     useState(true);
   const [rightIconColor] = useState('#000000');
+  const { t } = useTranslation();
   const { wp, hp, isTablet, width, height } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
   
@@ -131,18 +133,18 @@ const SharedChangePassword: React.FC<SharedChangePasswordProps> = ({
 
         <View style={rightpanelStyle}>
           <View>
-            <Text style={forgotpasswordtextStyle}>Set new password</Text>
+            <Text style={forgotpasswordtextStyle}>{t('change_password.title')}</Text>
           </View>
           <View>
             <Text style={forgotpasswordsubtextStyle}>
-              Enter a New Password to secure your Account
+              {t('change_password.subtitle')}
             </Text>
           </View>
           <View style={formsectionStyle}>
             <View style={styles.passwordContainer}>
               <TextInput
                 style={passwordInputStyle}
-                placeholder="Enter New Password"
+                placeholder={t('change_password.new_password_placeholder')}
                 placeholderTextColor={'#000000'}
                 value={password}
                 disableFullscreenUI={true}
@@ -164,7 +166,7 @@ const SharedChangePassword: React.FC<SharedChangePasswordProps> = ({
             <View style={styles.passwordContainer}>
               <TextInput
                 style={passwordInputStyle}
-                placeholder="Confirm New Password"
+                placeholder={t('change_password.confirm_password_placeholder')}
                 placeholderTextColor={'#000000'}
                 value={confirmPassword}
                 disableFullscreenUI={true}
@@ -192,7 +194,7 @@ const SharedChangePassword: React.FC<SharedChangePasswordProps> = ({
                   if (!password || !confirmPassword) {
                     Toast.show({
                       type: 'error',
-                      text1: 'Password is required',
+                      text1: t('change_password.password_required'),
                       position: 'top',
                     });
                     return;
@@ -201,7 +203,7 @@ const SharedChangePassword: React.FC<SharedChangePasswordProps> = ({
                   if (password.length < 9) {
                     Toast.show({
                       type: 'error',
-                      text1: 'Password must be at least 9 characters',
+                      text1: t('change_password.password_min_length'),
                       position: 'top',
                     });
                     return;
@@ -210,8 +212,8 @@ const SharedChangePassword: React.FC<SharedChangePasswordProps> = ({
                   if (password !== confirmPassword) {
                     Toast.show({
                       type: 'error',
-                      text1: 'Passwords do not match',
-                      text2: 'Please re-enter and try again',
+                      text1: t('change_password.passwords_mismatch'),
+                      text2: t('change_password.passwords_mismatch_msg'),
                       position: 'top',
                     });
                     return;
@@ -220,7 +222,7 @@ const SharedChangePassword: React.FC<SharedChangePasswordProps> = ({
                   await onSavePassword(password, confirmPassword);
                 }}
               >
-                <Text style={shared.loginText}>Save Password</Text>
+                <Text style={shared.loginText}>{t('change_password.save_password')}</Text>
               </Pressable>
             </View>
             {/* <View style={styles.cancelButton} onTouchEnd={onBackPress}>

@@ -24,6 +24,7 @@ import ConfirmCancelAlarmConfig from '../AlarmConfig/ConfirmCancelAlarmConfig';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/AppNavigator';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
@@ -373,6 +374,7 @@ WheelPicker.displayName = 'WheelPicker';
 type RouteProps = RouteProp<RootStackParamList, 'UpdateAlarmConfig'>;
 
 const UpdateAlarmConfig: React.FC = () => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProps>();
@@ -590,7 +592,7 @@ if (!hasValidConfig) {
       if (response?.patientId) {
         Toast.show({
           type: 'success',
-          text1: 'Patient config updated successfully',
+          text1: t('alarm.config_updated'),
         });
       }
       navigation.goBack();

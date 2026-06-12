@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Platform, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -37,6 +38,7 @@ const SharedForgotPassword: React.FC<SharedForgotPasswordProps> = ({
   onGetOtp,
   onVerifyOtp,
 }) => {
+  const { t } = useTranslation();
   // const { isTablet } = useResponsive();
   const { wp, hp, isTablet, width, height } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
@@ -163,17 +165,17 @@ const SharedForgotPassword: React.FC<SharedForgotPasswordProps> = ({
 
         <View style={styles.rightPanel}>
           <View>
-            <Text style={forgotPasswordTextStyle}>Forgot Password?</Text>
+            <Text style={forgotPasswordTextStyle}>{t('forgot_password.title')}</Text>
           </View>
           <View>
             <Text style={emailInstructionStyle}>
-              Please enter your Email Address to receive a Verification OTP
+              {t('forgot_password.instruction')}
             </Text>
           </View>
           <View style={styles.passwordContainer}>
             <TextInput
               style={[shared.placeholder,{paddingLeft: 10}]}
-              placeholder="Email Address"
+              placeholder={t('forgot_password.email_placeholder')}
               placeholderTextColor={'#606060'}
               value={email}
               disableFullscreenUI={true}
@@ -187,7 +189,7 @@ const SharedForgotPassword: React.FC<SharedForgotPasswordProps> = ({
                 if (!email) {
                   Toast.show({
                     type: 'error',
-                    text1: 'Email is required',
+                    text1: t('forgot_password.email_required'),
                     position: 'top',
                   });
                   return;
@@ -236,7 +238,7 @@ const SharedForgotPassword: React.FC<SharedForgotPasswordProps> = ({
               //   if (!email) {
               //     Toast.show({
               //       type: 'error',
-              //       text1: 'Email is required',
+              //       text1: t('forgot_password.email_required'),
               //       position: 'top',
               //     });
               //     return;
@@ -262,7 +264,7 @@ const SharedForgotPassword: React.FC<SharedForgotPasswordProps> = ({
                 if (!email) {
                   Toast.show({
                     type: 'error',
-                    text1: 'Email is required',
+                    text1: t('forgot_password.email_required'),
                     position: 'top',
                   });
                   return;
@@ -279,7 +281,7 @@ const SharedForgotPassword: React.FC<SharedForgotPasswordProps> = ({
                 }
               }}
             >
-              <Text style={shared.loginText}>Send OTP</Text>
+              <Text style={shared.loginText}>{t('forgot_password.send_otp')}</Text>
             </Pressable>
           </View>
           {/* <View style={styles.cancelButton} onTouchEnd={onBackPress}>

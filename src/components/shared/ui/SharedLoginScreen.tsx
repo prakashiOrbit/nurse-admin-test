@@ -14,6 +14,8 @@ import {
   FlatList,
   // ScrollView removed
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { LanguageSheet } from '../../LanguageSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -53,6 +55,8 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
   imageSource,
   onLogin,
 }) => {
+  const { t } = useTranslation();
+  const [showLangSheet, setShowLangSheet] = useState(false);
   const { wp, hp, isTablet, width, height } = useResponsive();
   const isLandscape = width > height;
 
@@ -433,8 +437,8 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
     if (mobileNumber.length < 10) {
       Toast.show({
         type: 'error',
-        text1: 'Incomplete Number',
-        text2: 'Please enter a valid 10-digit mobile number to proceed.',
+        text1: t('auth.incomplete_number'),
+        text2: t('auth.incomplete_number_msg'),
       });
       return;
     }
@@ -454,8 +458,8 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
       if (response?.status === 'error' || response?.code === 'USER_NOT_FOUND') {
         Toast.show({
           type: 'error',
-          text1: 'Access Denied',
-          text2: 'This mobile number is not registered in our system.',
+          text1: t('auth.access_denied'),
+          text2: t('auth.access_denied_msg'),
         });
         return;
       }
@@ -463,8 +467,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
       if (response?.code === '111') {
         Toast.show({
           type: 'error',
-          text1: 'Verify Your Email with 1 fact authentication',
-          // text2: response.message,
+          text1: t('auth.verify_email_1fa'),
         });
 
         return;
@@ -472,8 +475,8 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
       // 4. Success - Inform user and navigate
       Toast.show({
         type: 'success',
-        text1: 'OTP Dispatched',
-        text2: `A verification code has been sent to ${selectedCountry.code} ${mobileNumber}`,
+        text1: t('auth.otp_dispatched'),
+        text2: t('auth.otp_dispatched_msg', {code: selectedCountry.code, number: mobileNumber}),
         visibilityTime: 4000,
       });
 
@@ -487,13 +490,12 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
       });
     } catch (error: any) {
       const status = error?.response?.status;
-      let errorTitle = 'Request Failed';
-      let errorMessage =
-        'Unable to send OTP. Please check your network connection.';
+      let errorTitle = t('auth.request_failed');
+      let errorMessage = t('auth.request_failed_msg');
 
       if (status === 429) {
-        errorTitle = 'Too Many Attempts';
-        errorMessage = 'Please wait a few minutes before requesting a new OTP.';
+        errorTitle = t('auth.too_many_attempts');
+        errorMessage = t('auth.too_many_attempts_msg');
       } else if (error?.response?.data?.message) {
         errorMessage = error.response.data.message;
       }
@@ -546,7 +548,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
         case 'GMAIL_NOT_REGISTERED':
           Toast.show({
             type: 'error',
-            text1: 'Account Not Found',
+            text1: t('auth.account_not_found'),
             text2: response.message,
           });
           return;
@@ -554,7 +556,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
         case '111':
           Toast.show({
             type: 'info',
-            text1: 'Verify Your Email',
+            text1: t('auth.verify_email_title'),
             text2: response.message,
           });
           return;
@@ -562,7 +564,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
         case '222':
           Toast.show({
             type: 'info',
-            text1: '2-Factor Authentication',
+            text1: t('auth.two_fa'),
             text2: response.message,
           });
           navigation.navigate('TwoFactorAuth', {
@@ -581,10 +583,8 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
 
       Toast.show({
         type: 'error',
-        text1: 'Google Login Failed',
-        text2:
-          error?.response?.data?.message ||
-          'Unable to login with Google. Please try again.',
+        text1: t('auth.google_login_failed'),
+        text2: error?.response?.data?.message || t('auth.google_login_failed_msg'),
       });
     } finally {
       setGoogleLoading(false);
@@ -593,6 +593,9 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
 
   return (
     <View style={[styles.safeContainer]}>
+      <TouchableOpacity style={styles.globeBtn} onPress={() => setShowLangSheet(true)}>
+        <Text style={styles.globeIcon}>🌐</Text>
+      </TouchableOpacity>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -610,7 +613,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
               />
               <Text style={descriptionStyle}>{description}</Text>
               <View style={styles.leftBottom}>
-                <Text style={leftBottomText}>Powered by</Text>
+                <Text style={leftBottomText}>{t('common.powered_by')}</Text>
                 <Image
                   source={Images.iorbitLogo}
                   style={orgLogoStyle}
@@ -627,7 +630,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
                   resizeMode="contain"
                 />
                 <View>
-                  <Text style={headerWelcome}>Welcome to</Text>
+                  <Text style={headerWelcome}>{t('auth.welcome_to')}</Text>
                   <Text style={headerAppName}>{title} !</Text>
                 </View>
               </View>
@@ -657,7 +660,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
 
                 <TextInput
                   style={styles.flexInput}
-                  placeholder="Enter Mobile Number"
+                  placeholder={t('auth.enter_mobile')}
                   placeholderTextColor={'#000'}
                   value={mobileNumber}
                   onChangeText={text =>
@@ -670,8 +673,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
               </View>
               <View style={instructionView}>
                 <Text style={otpInstructionStyle}>
-                  An <Text style={{ fontWeight: '700' }}>OTP</Text> will be sent
-                  to this number
+                  {t('auth.otp_will_be_sent')}
                 </Text>
               </View>
 
@@ -681,13 +683,13 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
                 disabled={loading}
               >
                 <Text style={[styles.loginText, loginTextStyle]}>
-                  {loading ? 'Please wait...' : 'Get OTP'}
+                  {loading ? t('auth.please_wait') : t('auth.get_otp')}
                 </Text>
               </TouchableOpacity>
 
               <View style={loginwithStyle}>
                 <View style={horizontalLineStyle} />
-                <Text style={loginWithText}>Login with</Text>
+                <Text style={loginWithText}>{t('auth.login_with')}</Text>
                 <View style={horizontalLineStyle} />
               </View>
               <View style={bottomButtonStyle}>
@@ -698,7 +700,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
                   }}
                 >
                   <Image source={Icon.mail} style={mailIconStyle} />
-                  <Text style={buttonText}>E-mail Address</Text>
+                  <Text style={buttonText}>{t('auth.email_address')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={googleButtonStyle}
@@ -706,13 +708,15 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
                   onPress={handleGoogleLogin}
                 >
                   <Image source={googleIcon} style={googleIconStyle} />
-                  <Text style={buttonText}>{'Google Account'}</Text>
+                  <Text style={buttonText}>{t('auth.google_account')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+
+      <LanguageSheet visible={showLangSheet} onClose={() => setShowLangSheet(false)} />
 
       {isDropdownOpen && (
         <>
@@ -741,7 +745,7 @@ const SharedLoginScreen: React.FC<LoginScreenProps> = ({
 
               <TextInput
                 style={[styles.searchBar, searchBarStyle]}
-                placeholder="Search for countries"
+                placeholder={t('auth.search_countries')}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 disableFullscreenUI={true}
@@ -847,6 +851,16 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: verticalScale(8),
     fontSize: RFValue(12, 812),
+  },
+  globeBtn: {
+    position: 'absolute',
+    top: verticalScale(14),
+    right: scale(20),
+    zIndex: 10,
+    padding: scale(8),
+  },
+  globeIcon: {
+    fontSize: RFValue(18, 812),
   },
   mobileInputContainer: {
     zIndex: 1,

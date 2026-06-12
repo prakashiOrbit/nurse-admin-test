@@ -14,6 +14,7 @@ import { BedPatientInfo } from '../../../types/Types';
 import { getBedPatientInfo } from '../../../services/nurseService';
 import { useResponsive } from '../../../utils/responsive';
 import { getSharedStyles } from '../../../styles/sharedStyles';
+import { useTranslation } from 'react-i18next';
 
 const BackIcon = require('../../../../assets/icons/back-arrow.png');
 
@@ -23,6 +24,7 @@ interface PatientHeaderProps {
 }
 
 const PatientHeader: React.FC<PatientHeaderProps> = ({ bedCode, onClose }) => {
+  const { t } = useTranslation();
   const [patient, setPatient] = useState<BedPatientInfo | null>(null);
   const [showDateTooltip, setShowDateTooltip] = useState(false);
   const { isTablet } = useResponsive();
@@ -132,10 +134,10 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ bedCode, onClose }) => {
             {patient?.firstName ?? ''} {patient?.lastName ?? ''}
           </Text>
 
-          <Text style={mrnTextStyle}>MRN NO: {patient?.mrNumber ?? '-'}</Text>
+          <Text style={mrnTextStyle}>{t('patient_header.mrn_no')}{patient?.mrNumber ?? '-'}</Text>
 
           <Text style={genderStyle}>
-            {patient?.age ?? '-'}yrs | {patient?.gender ?? '-'}
+            {patient?.age ?? '-'}{t('common.age_suffix')} | {patient?.gender ?? '-'}
           </Text>
         </ScrollView>
       </View>
@@ -149,14 +151,14 @@ const PatientHeader: React.FC<PatientHeaderProps> = ({ bedCode, onClose }) => {
             activeOpacity={0.7}
           >
             <Text style={admissionDateStyle} numberOfLines={1}>
-              Admission date: {formatAdmissionDate(patient?.admissionDate)}
+              {t('patient_header.admission_date')}{formatAdmissionDate(patient?.admissionDate)}
             </Text>
           </TouchableOpacity>
 
           {showDateTooltip && (
             <View style={styles.tooltipContainer}>
               <Text style={styles.tooltipText}>
-                Admission: {formatAdmissionDate(patient?.admissionDate)}
+                {t('patient_header.admission')}{formatAdmissionDate(patient?.admissionDate)}
               </Text>
             </View>
           )}

@@ -19,6 +19,7 @@ import { fontScale, scale, verticalScale } from '../../../../utils/scaling';
 import { useResponsive } from '../../../../utils/responsive';
 import { getSharedStyles } from '../../../../styles/sharedStyles';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 type SharedForgotPasswordOTPProps = {
   title: string;
   // description: string;
@@ -41,6 +42,7 @@ const SharedForgotPasswordOTP: React.FC<SharedForgotPasswordOTPProps> = ({
   onResendOtp,
   emailAddress,
 }) => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string>('');
   const [isOtpDisabled, setIsOtpDisabled] = useState(false);
   const [timer, setTimer] = useState(59);
@@ -230,13 +232,13 @@ const SharedForgotPasswordOTP: React.FC<SharedForgotPasswordOTPProps> = ({
           >
             <View>
               <Text style={emailInstructionStyle}>
-                Please enter 6 digit OTP sent to:{' '}
+                {t('otp.prompt')}{' '}
                 <Text style={emailBoldStyle}>
                   {encryptEmail(emailAddress?.toString() || '')}
                 </Text>
                 <Text style={editTextStyle} onPress={onEditPress}>
                   {' '}
-                  Edit
+                  {t('otp.edit')}
                 </Text>
               </Text>
             </View>
@@ -271,7 +273,7 @@ const SharedForgotPasswordOTP: React.FC<SharedForgotPasswordOTPProps> = ({
             </View>
             <View style={styles.resendContainer}>
               <Text style={resendTextStyle}>
-                Didn’t receive any OTP?{' '}
+                {t(‘otp.didnt_receive’)}
                 <Text
                   style={[
                     resendTextStyle,
@@ -294,7 +296,7 @@ const SharedForgotPasswordOTP: React.FC<SharedForgotPasswordOTPProps> = ({
                     } catch (e) {
                       Toast.show({
                         type: 'error',
-                        text1: 'Failed to resend OTP',
+                        text1: t('otp.failed_resend'),
                         position: 'top',
                       });
                     } finally {
@@ -302,7 +304,7 @@ const SharedForgotPasswordOTP: React.FC<SharedForgotPasswordOTPProps> = ({
                     }
                   }}
                 >
-                  Resend OTP
+                  {t('otp.resend_otp')}
                 </Text>
               </Text>
             </View>
@@ -322,7 +324,7 @@ const SharedForgotPasswordOTP: React.FC<SharedForgotPasswordOTPProps> = ({
                   if (otp.some(digit => digit === '')) {
                     Toast.show({
                       type: 'error',
-                      text1: 'Please enter complete OTP',
+                      text1: t('otp.enter_complete_otp'),
                       position: 'top',
                     });
                     return;
@@ -339,18 +341,18 @@ const SharedForgotPasswordOTP: React.FC<SharedForgotPasswordOTPProps> = ({
                     const message = error?.response?.data?.message;
 
                     if (message?.toLowerCase().includes('invalid')) {
-                      setOtpError('*Incorrect OTP');
+                      setOtpError(t('otp.incorrect_otp'));
                     } else if (message?.toLowerCase().includes('expired')) {
-                      setOtpError('*OTP expired. Please request a new one.');
+                      setOtpError(t('otp.otp_expired'));
                     } else {
-                      setOtpError('*Something went wrong. Please try again.');
+                      setOtpError(t('otp.something_went_wrong'));
                     }
                   } finally {
                     setLoading(false);
                   }
                 }}
               >
-                <Text style={shared.loginText}>Verify OTP</Text>
+                <Text style={shared.loginText}>{t('otp.verify_otp')}</Text>
               </Pressable>
             </View>
             {/* <View style={styles.cancelButton} onTouchEnd={onBackPress}>

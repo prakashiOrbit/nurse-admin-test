@@ -4,6 +4,7 @@ import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { navigate } from '../navigation/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNurseNoteAPI } from '../services/authService';
+import i18n from '../i18n';
 
 export const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission();
@@ -66,7 +67,7 @@ const displayNotification = async (
   }
 
   await notifee.displayNotification({
-    title: title || 'Notification',
+    title: title || i18n.t('notifications.title'),
     body: body || '',
     data: data || {},
 
@@ -80,12 +81,12 @@ const displayNotification = async (
       // largeIcon: 'ic_launcher',
       actions: [
         {
-          title: 'View Details',
+          title: i18n.t('notifications.view_details'),
           pressAction: { id: 'view_details', launchActivity: 'default' },
         },
-        { title: 'Mark as Read', pressAction: { id: 'mark_as_read' } },
+        { title: i18n.t('notifications.mark_as_read'), pressAction: { id: 'mark_as_read' } },
         {
-          title: 'Send Instructions',
+          title: i18n.t('notifications.send_instructions'),
           pressAction: { id: 'send_instructions', launchActivity: 'default' },
         },
       ],

@@ -15,6 +15,7 @@ import { verticalScale } from 'react-native-size-matters';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useResponsive } from '../../../utils/responsive';
 import { getSharedStyles } from '../../../styles/sharedStyles';
+import { useTranslation } from 'react-i18next';
 
 type AlarmTrendChartProps = {
   paramName: string;
@@ -40,6 +41,7 @@ const AlarmTrendChart: React.FC<AlarmTrendChartProps> = ({
   alarmValue: alarmValProp,
 }) => {
   const { isTablet } = useResponsive();
+  const { t } = useTranslation();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
   console.log('Para: ' + paramName);
 
@@ -96,7 +98,7 @@ const AlarmTrendChart: React.FC<AlarmTrendChartProps> = ({
   if (!alarmTs || isNaN(alarmTs)) {
     return (
       <View style={styles.noData}>
-        <Text>Invalid alarm timestamp</Text>
+        <Text>{t('monitoring.invalid_alarm_timestamp')}</Text>
       </View>
     );
   }
@@ -204,7 +206,7 @@ const AlarmTrendChart: React.FC<AlarmTrendChartProps> = ({
   if (!chartBounds || !data.length) {
     return (
       <View style={styles.noData}>
-        <Text>No trend data</Text>
+        <Text>{t('monitoring.no_trend_data')}</Text>
       </View>
     );
   }

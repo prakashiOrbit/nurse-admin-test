@@ -14,6 +14,8 @@ import {
   FlatList,
   // ScrollView removed
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { LanguageSheet } from '../../components/LanguageSheet';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -38,6 +40,8 @@ const eyeOffIcon = require('../../../assets/icons/eye-off-line.png');
 // };
 
 const EmailLoginScreen = () => {
+  const { t } = useTranslation();
+  const [showLangSheet, setShowLangSheet] = useState(false);
   const { wp, hp, isTablet, width, height } = useResponsive();
   const isLandscape = width > height;
 
@@ -286,8 +290,8 @@ const EmailLoginScreen = () => {
     if (!username || !password) {
       Toast.show({
         type: 'error',
-        text1: 'Required Fields',
-        text2: 'Please enter your email and password to continue.',
+        text1: t('auth.required_fields'),
+        text2: t('auth.required_fields_msg'),
       });
       return;
     }
@@ -297,8 +301,8 @@ const EmailLoginScreen = () => {
     if (!validateEmail(trimmedUsername)) {
       Toast.show({
         type: 'error',
-        text1: 'Invalid Format',
-        text2: 'Please enter a valid email address.',
+        text1: t('auth.invalid_format'),
+        text2: t('auth.invalid_format_msg'),
       });
       return;
     }
@@ -324,9 +328,9 @@ const EmailLoginScreen = () => {
       if (response.code === '111') {
         Toast.show({
          type: 'success',
-          text1: 'Security Verification',
-          text2: 'A 1FA code has been sent to your registered device.',
-          visibilityTime: 6000, // Give them time to read instructions
+          text1: t('auth.security_verification'),
+          text2: t('auth.code_sent_1fa'),
+          visibilityTime: 6000,
         });
         navigation.navigate('TwoFactorAuth', {
           email: trimmedUsername,
@@ -339,8 +343,8 @@ const EmailLoginScreen = () => {
       if (response.code === '222') {
         Toast.show({
           type: 'success',
-          text1: 'Security Verification',
-          text2: 'A 2FA code has been sent to your registered device.',
+          text1: t('auth.security_verification'),
+          text2: t('auth.code_sent_2fa'),
         });
         navigation.navigate('TwoFactorAuth', {
           email: trimmedUsername,
@@ -353,7 +357,7 @@ const EmailLoginScreen = () => {
       // Success Toast for direct login
       Toast.show({
         type: 'success',
-        text1: 'Login Successful',
+        text1: t('auth.login_successful'),
       });
 
       // navigation.replace('Dashboard');
@@ -363,16 +367,15 @@ const EmailLoginScreen = () => {
 
       console.log('Login Error status:', status);
       // Custom messages based on HTTP Status
-      let errorTitle = 'Authentication Failed';
-      let errorMessage = 'Please check your credentials and try again.';
+      let errorTitle = t('auth.auth_failed');
+      let errorMessage = t('auth.auth_failed_msg');
 
       if (status === 'UNAUTHORIZED') {
-        errorTitle = 'Invalid Credentials';
-        errorMessage = 'The email or password you entered is incorrect.';
+        errorTitle = t('auth.invalid_credentials');
+        errorMessage = t('auth.invalid_credentials_msg');
       } else if (!status) {
-        errorTitle = 'Connection Error';
-        errorMessage =
-          'Unable to reach the server. Please check your internet.';
+        errorTitle = t('auth.connection_error');
+        errorMessage = t('auth.connection_error_msg');
       } else if (loginError?.response?.data?.message) {
         errorMessage = loginError.response.data.message;
       }
@@ -400,6 +403,9 @@ const EmailLoginScreen = () => {
           style={[styles.backButtonImage, { aspectRatio: 16 / 16 }]}
         />
       </View>
+      <TouchableOpacity style={styles.globeBtn} onPress={() => setShowLangSheet(true)}>
+        <Text style={styles.globeIcon}>🌐</Text>
+      </TouchableOpacity>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -415,12 +421,10 @@ const EmailLoginScreen = () => {
                 resizeMode="contain"
               />
               <Text style={descriptionStyle}>
-                An ICU app for nurses to monitor real-time vitals, receive
-                doctor instructions, manage shift handovers and respond quickly
-                to critical alerts for safer patient care.
+                {t('auth.app_description')}
               </Text>
               <View style={styles.leftBottom}>
-                <Text style={leftBottomText}>Powered by</Text>
+                <Text style={leftBottomText}>{t('common.powered_by')}</Text>
                 <Image
                   source={Images.iorbitLogo}
                   style={orgLogoStyle}
@@ -437,13 +441,13 @@ const EmailLoginScreen = () => {
                   resizeMode="contain"
                 />
                 <View>
-                  <Text style={headerWelcome}>Welcome to</Text>
-                  <Text style={headerAppName}>iTouch Nurse !</Text>
+                  <Text style={headerWelcome}>{t('auth.welcome_to')}</Text>
+                  <Text style={headerAppName}>{t('auth.app_title')} !</Text>
                 </View>
               </View>
               <TextInput
                 style={inputStyle}
-                placeholder="Email Address"
+                placeholder={t('auth.email_placeholder')}
                 placeholderTextColor={'#000000'}
                 value={username}
                 onChangeText={setUsername}
@@ -458,7 +462,7 @@ const EmailLoginScreen = () => {
                 <TextInput
                   ref={passwordInputRef}
                   style={[styles.passwordInput, passwordInputStyle]}
-                  placeholder="Password"
+                  placeholder={t('auth.password_placeholder')}
                   placeholderTextColor={'#000000'}
                   value={password}
                   onChangeText={setPassword}
@@ -485,7 +489,7 @@ const EmailLoginScreen = () => {
                     style={styles.forgotText}
                     onPress={handleForgotPassword}
                   >
-                    Forgot password?
+                    {t('auth.forgot_password')}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -496,7 +500,7 @@ const EmailLoginScreen = () => {
                 disabled={loading}
               >
                 <Text style={[styles.loginText, loginTextStyle]}>
-                  {loading ? 'Please wait...' : 'Get OTP'}
+                  {loading ? t('auth.please_wait') : t('auth.get_otp')}
                 </Text>
               </TouchableOpacity>
               {/* <TouchableOpacity
@@ -512,6 +516,7 @@ const EmailLoginScreen = () => {
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+      <LanguageSheet visible={showLangSheet} onClose={() => setShowLangSheet(false)} />
     </View>
   );
 };
@@ -633,6 +638,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   googleIconStyle: { width: 20, height: 20, marginRight: 10 },
+  globeBtn: {
+    position: 'absolute',
+    top: verticalScale(30),
+    right: scale(30),
+    zIndex: 10,
+    padding: scale(8),
+  },
+  globeIcon: {
+    fontSize: RFValue(18, 812),
+  },
   modalContent: {
     width: '80%',
     height: '50%',

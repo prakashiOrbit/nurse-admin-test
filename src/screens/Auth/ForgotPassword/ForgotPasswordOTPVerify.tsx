@@ -17,6 +17,7 @@ import Toast from 'react-native-toast-message';
 import { RootStackParamList } from '../../../navigation/AppNavigator';
 import { clearAuthSession } from '../../../services/sessionService';
 import SharedForgotPasswordOTP from '../../../components/shared/ui/SharedForgotPassword/SharedForgotPasswordOTP';
+import { useTranslation } from 'react-i18next';
 
 const ForgotPasswordImg = require('../../../../assets/images/verifyOTP.png');
 // const BackButtonImg = require('../../../../assets/icons/black_back-arrow.png');
@@ -24,6 +25,7 @@ const BackButtonImg = require('../../../../assets/icons/back-arrow2.png');
 
 type VerfyForgotOTPRouteProp = RouteProp<RootStackParamList, 'VerfyForgotOTP'>;
 const ForgotPasswordOTPVerify: React.FC = () => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<VerfyForgotOTPRouteProp>();
@@ -36,8 +38,8 @@ const ForgotPasswordOTPVerify: React.FC = () => {
       if (response?.code === '555') {
         Toast.show({
           type: 'success',
-          text1: 'OTP verified successfully',
-          text2: 'You can now reset your password',
+          text1: t('forgot_password.otp_verified'),
+          text2: t('forgot_password.otp_verified_msg'),
           position: 'top',
         });
         navigation.replace('CreateNewPassword', { email });
@@ -45,13 +47,12 @@ const ForgotPasswordOTPVerify: React.FC = () => {
       }
       return false;
     } catch (error: any) {
-      // console.log('OTP verification failed:', error.message);
       const message = error.response?.data?.message;
       if (message?.toLowerCase().includes('invalid')) {
         Toast.show({
           type: 'error',
-          text1: 'Invalid OTP',
-          text2: 'Please try again',
+          text1: t('forgot_password.invalid_otp'),
+          text2: t('forgot_password.invalid_otp_msg'),
           position: 'top',
         });
       }
@@ -70,27 +71,25 @@ const ForgotPasswordOTPVerify: React.FC = () => {
       ) {
         Toast.show({
           type: 'success',
-          text1: 'OTP sent successfully',
+          text1: t('forgot_password.otp_sent'),
           position: 'top',
         });
-        // navigation.replace('VerfyForgotOTP', { email });
       }
 
       return true;
-      // optionally show toast / start timer / enable OTP inputs
     } catch (err: any) {
       console.error('Failed to send OTP');
       if (err.response?.data?.message?.includes('User not found')) {
         Toast.show({
           type: 'error',
-          text1: 'User not found.',
+          text1: t('forgot_password.user_not_found'),
           position: 'top',
         });
         return false;
       }
       Toast.show({
         type: 'error',
-        text1: 'Failed to send OTP. Please try again.',
+        text1: t('forgot_password.otp_send_failed'),
         position: 'top',
       });
       return false;
@@ -99,7 +98,7 @@ const ForgotPasswordOTPVerify: React.FC = () => {
   return (
     <View style={{ flex: 1 }}>
       <SharedForgotPasswordOTP
-        title="iTouch Nurse"
+        title={t('auth.app_title')}
         imageSource={ForgotPasswordImg}
         backButton={BackButtonImg}
         onBackPress={async () => {

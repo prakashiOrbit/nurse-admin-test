@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const eyeIcon = require('../../../assets/icons/eye-line.png');
 const eyeOffIcon = require('../../../assets/icons/eye-off-line.png');
@@ -27,6 +28,7 @@ type RootStackParamList = {
 };
 
 const LoginScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -56,7 +58,7 @@ const LoginScreen = () => {
       navigation.replace('TwoFactorAuth');
     } catch (err) {
       console.error('Login failed:', err);
-      setError('Invalid credentials. Please try again.');
+      setError(t('auth.invalid_credentials_inline'));
     }
   };
 
@@ -67,23 +69,20 @@ const LoginScreen = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
 
         <View style={styles.leftPanel}>
-          <Text style={styles.appTitle}>iTouch Nurse</Text>
+          <Text style={styles.appTitle}>{t('auth.app_title')}</Text>
           <Image source={require('../../../assets/images/nurse.png')} style={styles.image} resizeMode="contain" />
           <Text style={styles.description}>
-            This app is built to streamline ICU tasks for nurses. View real time
-            patient vitals, receive instructions from doctors and manage shift
-            handovers smoothly. Easily access patient details, get critical alerts
-            and stay connected for faster, safer care delivery.
+            {t('auth.app_description_long')}
           </Text>
         </View>
 
         <View style={styles.rightPanel}>
           <Image source={require('../../../assets/images/hospital_logo.jpg')} style={styles.logo} />
-          <Text style={styles.welcomeText}>Welcome to ICU Ward B</Text>
+          <Text style={styles.welcomeText}>{t('auth.welcome_to')} ICU Ward B</Text>
 
           <TextInput
             style={styles.input}
-            placeholder="Username"
+            placeholder={t('auth.username_placeholder')}
             placeholderTextColor={'#000000'}
             value={username}
             onChangeText={setUsername}
@@ -93,7 +92,7 @@ const LoginScreen = () => {
            <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
-              placeholder="Password"
+              placeholder={t('auth.password_placeholder')}
               placeholderTextColor={'#000000'}
               value={password}
               onChangeText={setPassword}
@@ -117,12 +116,12 @@ const LoginScreen = () => {
           <View style={styles.forgotRow}>
             <Text style={styles.forgotText}> </Text>
             <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Forgot password?</Text>
+              <Text style={styles.forgotPassword}>{t('auth.forgot_password')}</Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginText}>Log in</Text>
+            <Text style={styles.loginText}>{t('auth.log_in')}</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

@@ -2,6 +2,7 @@
 import React, {createContext, useEffect, useState, useRef} from 'react';
 import NetInfo, {NetInfoState} from '@react-native-community/netinfo';
 import {View, Text, StyleSheet, Animated, Alert} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 type NetworkContextType = {
   isConnected: boolean;
@@ -14,6 +15,7 @@ export const NetworkContext = createContext<NetworkContextType>({
 });
 
  const NetworkProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const {t} = useTranslation();
   const [isConnected, setIsConnected] = useState(true);
   const [isPoorConnection, setIsPoorConnection] = useState(false);
   const [showReconnectBanner, setShowReconnectBanner] = useState(false);
@@ -38,11 +40,11 @@ export const NetworkContext = createContext<NetworkContextType>({
     setAlertVisible(true);
 
     Alert.alert(
-      'Network Issue',
-      'No internet connection. Please check your network.',
+      t('common.network_issue'),
+      t('common.no_internet'),
       [
         {
-          text: 'Retry',
+          text: t('common.retry'),
           onPress: async () => {
             setAlertVisible(false);
             await checkNetworkManually();
@@ -135,7 +137,7 @@ export const NetworkContext = createContext<NetworkContextType>({
             styles.banner,
             {backgroundColor: 'rgba(0, 180, 0, 0.9)', opacity: fadeAnim},
           ]}>
-          <Text style={styles.text}>Back Online</Text>
+          <Text style={styles.text}>{t('common.back_online')}</Text>
         </Animated.View>
       )}
     </NetworkContext.Provider>

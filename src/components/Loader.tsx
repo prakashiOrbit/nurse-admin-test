@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { fontScale } from '../utils/scaling';
 
@@ -9,14 +10,15 @@ type LoaderProps = {
 
 const Loader: React.FC<LoaderProps> = ({
   visible,
-  text = 'Please wait…',
+  text,
 }) => {
+  const { t } = useTranslation();
   if (!visible) return null;
 
   return (
     <View style={styles.overlay}>
       <ActivityIndicator size="large" color="#4CAE51" />
-      <Text style={styles.text}>{text}</Text>
+      <Text style={styles.text}>{text ?? t('common.processing')}</Text>
     </View>
   );
 };

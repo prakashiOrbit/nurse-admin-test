@@ -17,6 +17,7 @@ import { getMedicalHistory } from '../services/bedService';
 import { useResponsive } from '../utils/responsive';
 import { getSharedStyles } from '../styles/sharedStyles';
 import { scale, verticalScale } from 'react-native-size-matters';
+import { useTranslation } from 'react-i18next';
 
 type CalloutHeaderProps = {
   bedCode: string;
@@ -33,6 +34,7 @@ const CalloutHeader: React.FC<CalloutHeaderProps> = ({
   setSelectedTab,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const [patientInfo, setPatientInfo] = useState<any>(null);
   const [showDateTooltip, setShowDateTooltip] = useState<boolean>(false);
   const { isTablet } = useResponsive();
@@ -140,11 +142,11 @@ const closeTextStyle = useMemo(() => ({
           </Text>
 
           <Text style={mrnTextStyle}>
-            MRN No: {patientInfo?.mrNumber || '-'}
+            {t('callout_header.mrn_no')}: {patientInfo?.mrNumber || '-'}
           </Text>
 
           <Text style={genderStyle}>
-            {patientInfo?.age ?? '-'}yrs | {patientInfo?.gender ?? '-'}
+            {patientInfo?.age ?? '-'}{t('common.age_suffix')} | {patientInfo?.gender ?? '-'}
           </Text>
         </ScrollView>
       </View>
@@ -157,7 +159,7 @@ const closeTextStyle = useMemo(() => ({
             activeOpacity={0.7}
           >
             <Text style={admissionDateStyle} numberOfLines={1}>
-              Admission date: {formatAdmissionDate(patientInfo?.admissionDate)}
+              {t('callout_header.admission_date')}: {formatAdmissionDate(patientInfo?.admissionDate)}
             </Text>
           </TouchableOpacity>
         </View>

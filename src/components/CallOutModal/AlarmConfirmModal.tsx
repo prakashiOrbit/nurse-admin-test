@@ -14,6 +14,7 @@ import { fontScale, scale, verticalScale } from '../../utils/scaling';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 
 type AlarmConfirmModalProps = {
   visible: boolean;
@@ -28,6 +29,7 @@ export const AlarmConfirmModal: React.FC<AlarmConfirmModalProps> = ({
   onClose,
   alarmInfo,
 }) => {
+  const { t } = useTranslation();
   const { isTablet, wp, hp } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
 
@@ -37,12 +39,12 @@ export const AlarmConfirmModal: React.FC<AlarmConfirmModalProps> = ({
       console.log('alarm info id:, ', alarmInfo.alarmId);
       const response = await handleAlarmIgnore(alarmInfo.alarmId);
       if (response && response.alarmId) {
-        Alert.alert('Success', 'Alarm ignored successfully.');
+        Alert.alert(t('common.success'), t('alarm.ignored_successfully'));
       } else {
-        Alert.alert('Error', 'Failed to ignore the alarm. Please try again.');
+        Alert.alert(t('common.error'), t('alarm.ignore_failed'));
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to ignore the alarm. Please try again.');
+      Alert.alert(t('common.error'), t('alarm.ignore_failed'));
     }
     onClose();
   };
@@ -98,19 +100,19 @@ export const AlarmConfirmModal: React.FC<AlarmConfirmModalProps> = ({
       <View style={styles.overlay}>
         <View style={confirmBoxStyle}>
           <Text style={textStyle}>
-            Are you sure you want to ignore this notification?
+            {t('alarm.ignore_confirm')}
           </Text>
 
           <View style={styles.buttonParent}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={cancelButtonTextStyle}>Cancel</Text>
+              <Text style={cancelButtonTextStyle}>{t('common.cancel')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.confirmButton}
               onPress={() => handleAlarmIgnoreForAlarm(alarmInfo)}
             >
-              <Text style={confirmButtonTextStyle}>Yes, Ignore</Text>
+              <Text style={confirmButtonTextStyle}>{t('alarm.yes_ignore')}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -12,6 +12,7 @@ import { getPatientInstructions } from '../../services/bedService';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
+import { useTranslation } from 'react-i18next';
 import { scale, verticalScale } from 'react-native-size-matters';
 const InstructionsVector = require('../../../assets/icons/instruction.png');
 
@@ -30,6 +31,7 @@ const PatientInstructions: React.FC<PatientInstructionsProps> = ({
 
   const [instructions, setInstructions] = useState<Instruction[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
   const { isTablet } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
 
@@ -82,7 +84,7 @@ const PatientInstructions: React.FC<PatientInstructionsProps> = ({
         setInstructions(sorted);
         setError(null);
       } catch (err: any) {
-        setError('No instructions Found');
+        setError(t('patient_instructions.no_found'));
       } finally {
       }
     };
@@ -102,7 +104,7 @@ const PatientInstructions: React.FC<PatientInstructionsProps> = ({
   }
 
   if (!instructions.length) {
-    return <Text style={emptyStyle}>No instructions available</Text>;
+    return <Text style={emptyStyle}>{t('patient_instructions.no_available')}</Text>;
   }
 
   return (

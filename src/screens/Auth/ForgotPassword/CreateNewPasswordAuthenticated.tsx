@@ -11,6 +11,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/AppNavigator';
 import { clearAuthSession } from '../../../services/sessionService';
 import { navigate } from '../../../navigation/navigationService';
+import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../../components/Loader';
 import { set } from 'lodash';
@@ -25,6 +26,7 @@ type CreateNewPasswordRouteProp = RouteProp<
 >;
 
 const CreateNewPasswordAuthenticated: React.FC = () => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<CreateNewPasswordRouteProp>();
@@ -55,41 +57,39 @@ const CreateNewPasswordAuthenticated: React.FC = () => {
       });
       Toast.show({
         type: 'success',
-        text1: 'Password reset successful',
-        text2: 'Please login again',
+        text1: t('forgot_password.reset_successful'),
+        text2: t('forgot_password.reset_successful_msg'),
         position: 'top',
       });
 
-      // clear session and navigate to login
       await clearAuthSession();
       navigation.reset({
         index: 0,
         routes: [{ name: 'NurseLogin' }],
       });
     } catch (error: any) {
-      // console.log("CreateNewPassword handleResetPassword error:", error.response);
       if (
         error.response.data ===
         'New password must be different from current password.'
       ) {
         Toast.show({
           type: 'error',
-          text1: 'New password must be different from current password',
+          text1: t('forgot_password.password_reused_msg'),
           position: 'top',
         });
         return;
       } else if (error.response.data === 'Current password is incorrect.') {
         Toast.show({
           type: 'error',
-          text1: 'Current password is incorrect',
+          text1: t('change_password_auth.current_password_incorrect'),
           position: 'top',
         });
         return;
       }
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: error.message || 'An error occurred while resetting password',
+        text1: t('common.error'),
+        text2: error.message || t('change_password.error_msg'),
       });
     }finally {
     setLoading(false);
@@ -107,27 +107,26 @@ const CreateNewPasswordAuthenticated: React.FC = () => {
       ) {
         Toast.show({
           type: 'success',
-          text1: 'OTP sent successfully',
+          text1: t('forgot_password.otp_sent'),
           position: 'top',
         });
         navigation.navigate('ForgotPasswordAuthenticated');
       }
 
       return true;
-      // optionally show toast / start timer / enable OTP inputs
     } catch (err: any) {
       console.error('Failed to send OTP');
-      if (err.response?.data?.message.contains('User not found')) {
+      if (err.response?.data?.message?.includes('User not found')) {
         Toast.show({
           type: 'error',
-          text1: 'User not found.',
+          text1: t('forgot_password.user_not_found'),
           position: 'top',
         });
         return false;
       }
       Toast.show({
         type: 'error',
-        text1: 'Failed to send OTP. Please try again.',
+        text1: t('forgot_password.otp_send_failed'),
         position: 'top',
       });
       return false;

@@ -15,6 +15,7 @@ import { fontScale, scale, verticalScale } from '../../utils/scaling';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 
 type AlarmInputModalProps = {
   visible: boolean;
@@ -30,12 +31,13 @@ export const AlarmInputModal: React.FC<AlarmInputModalProps> = ({
   onClose,
   alarmInfo,
 }) => {
+  const { t } = useTranslation();
   const [userInput, setUserInput] = useState('');
   const { isTablet, wp, hp } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
   const handleSubmit = async () => {
     if (!userInput.trim()) {
-      Alert.alert('Input Required', 'Please enter a reason before submitting.');
+      Alert.alert(t('alarm.input_required'), t('alarm.input_required_msg'));
       return;
     }
 
@@ -46,12 +48,12 @@ export const AlarmInputModal: React.FC<AlarmInputModalProps> = ({
       });
 
       if (response && response.alarmId) {
-        Alert.alert('Success', 'Alarm handled successfully.');
+        Alert.alert(t('common.success'), t('alarm.handled_successfully'));
       } else {
-        Alert.alert('Error', 'Failed to handle the alarm. Please try again.');
+        Alert.alert(t('common.error'), t('alarm.handle_failed'));
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to handle the alarm. Please try again.');
+      Alert.alert(t('common.error'), t('alarm.handle_failed'));
     }
     onClose();
     setUserInput('');
@@ -109,12 +111,12 @@ export const AlarmInputModal: React.FC<AlarmInputModalProps> = ({
       <View style={styles.overlay}>
         <View style={confirmBoxStyle}>
           <Text style={textStyle}>
-            Enter a reason for handling this alarm:
+            {t('alarm.input_reason')}
           </Text>
 
           <TextInput
             style={[styles.input, shared.placeholder]}
-            placeholder="Type here..."
+            placeholder={t('alarm.type_here')}
             placeholderTextColor="#999"
             value={userInput}
             disableFullscreenUI={true}
@@ -124,14 +126,14 @@ export const AlarmInputModal: React.FC<AlarmInputModalProps> = ({
 
           <View style={styles.buttonParent}>
             <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={cancelButtonTextStyle}>Cancel</Text>
+              <Text style={cancelButtonTextStyle}>{t('common.cancel')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.confirmButton}
               onPress={handleSubmit}
             >
-              <Text style={confirmButtonTextStyle}>Submit</Text>
+              <Text style={confirmButtonTextStyle}>{t('alarm.submit')}</Text>
             </TouchableOpacity>
           </View>
         </View>

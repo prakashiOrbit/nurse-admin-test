@@ -16,6 +16,7 @@ import type { RouteProp } from '@react-navigation/native';
 import { navigate } from '../../../navigation/navigationService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { clearAuthSession } from '../../../services/sessionService';
+import { useTranslation } from 'react-i18next';
 
 const ChangePasswordIMG = require('../../../../assets/images/resetPassword.png');
 const BackButtonImg = require('../../../../assets/icons/back-arrow2.png');
@@ -28,6 +29,7 @@ type CreateNewPasswordRouteProp = RouteProp<
 >;
 
 const CreateNewPassword: React.FC = () => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<CreateNewPasswordRouteProp>();
@@ -46,32 +48,30 @@ const CreateNewPassword: React.FC = () => {
       });
       Toast.show({
         type: 'success',
-        text1: 'Password reset successful.',
-        text2: 'Please login again.',
+        text1: t('forgot_password.reset_successful'),
+        text2: t('forgot_password.reset_successful_msg'),
         position: 'top',
       });
-      
-      // clear session and navigate to login
+
       await clearAuthSession();
       navigation.pop(2);
     } catch (error: any) {
-      // console.log("CreateNewPassword handleResetPassword error:", error.response);
       if (
         error.response.data ===
         'New password must be different from current password.'
       ) {
         Toast.show({
           type: 'error',
-          text1: 'Password Reused',
-          text2: 'New password must be different from current password',
+          text1: t('forgot_password.password_reused'),
+          text2: t('forgot_password.password_reused_msg'),
           position: 'top',
         });
         return;
       }
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: error.message || 'An error occurred while resetting password',
+        text1: t('common.error'),
+        text2: error.message || t('change_password.error_msg'),
       });
     }
   };
@@ -79,7 +79,7 @@ const CreateNewPassword: React.FC = () => {
   return (
     <View style={{ flex: 1 }}>
       <SharedChangePassword
-        title="iTouch Nurse"
+        title={t('auth.app_title')}
         description="This app is built to streamline ICU tasks for nurses. View real time patient vitals, receive instructions from doctors and manage shift handovers smoothly. Easily access patient details, get critical alerts and stay connected for faster, safer care delivery."
         imageSource={ChangePasswordIMG}
         eyeImage={eyeIcon}

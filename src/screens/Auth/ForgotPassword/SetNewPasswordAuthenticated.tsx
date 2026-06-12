@@ -21,6 +21,7 @@ import { useResponsive } from '../../../utils/responsive';
 import { clearAuthSession } from '../../../services/sessionService';
 import { resetPasswordAPI } from '../../../services/authService';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 
 const BackButtonImg = require('../../../../assets/icons/back-arrow2.png');
 const eyeImage = require('../../../../assets/icons/eye-line.png');
@@ -32,6 +33,7 @@ type SetNewPasswordAuthenticatedProps = RouteProp<
 >;
 
 const SetNewPasswordAuthenticated: React.FC = () => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -134,35 +136,33 @@ const headerTitleStyle = useMemo(() => ({
       });
       Toast.show({
         type: 'success',
-        text1: 'Password reset successful.',
-        text2: 'Please login again.',
+        text1: t('forgot_password.reset_successful'),
+        text2: t('forgot_password.reset_successful_msg'),
         position: 'top',
       });
 
-      // clear session and navigate to login
       await clearAuthSession();
       navigation.reset({
         index: 0,
         routes: [{ name: 'NurseLogin' }],
       });
     } catch (error: any) {
-      // console.log("CreateNewPassword handleResetPassword error:", error.response);
       if (
         error.response.data ===
         'New password must be different from current password.'
       ) {
         Toast.show({
           type: 'error',
-          text1: 'Password Reused',
-          text2: 'New password must be different from current password',
+          text1: t('forgot_password.password_reused'),
+          text2: t('forgot_password.password_reused_msg'),
           position: 'top',
         });
         return;
       }
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: error.message || 'An error occurred while resetting password',
+        text1: t('common.error'),
+        text2: error.message || t('change_password.error_msg'),
       });
     }
   };
@@ -179,7 +179,7 @@ const headerTitleStyle = useMemo(() => ({
           <Image source={BackButtonImg} style={styles.backButtonImage} />
         </View>
 
-        <Text style={headerTitleStyle}>Set New Password</Text>
+        <Text style={headerTitleStyle}>{t('change_password.title')}</Text>
       </View>
       <KeyboardAvoidingView
         style={styles.rightContainer}
@@ -195,14 +195,14 @@ const headerTitleStyle = useMemo(() => ({
           >
             <View>
               <Text style={forgotpasswordsubtextStyle}>
-                Enter a New Password to secure your Account
+                {t('change_password.subtitle')}
               </Text>
             </View>
             <View style={styles.formSection}>
               <View style={styles.passwordContainer}>
                 <TextInput
                     style={[styles.passwordInput, { fontSize: placeholderStyle.fontSize }]}
-                  placeholder="Enter New Password"
+                  placeholder={t('change_password.new_password_placeholder')}
                   placeholderTextColor={'#000000'}
                   value={password}
                   disableFullscreenUI={true}
@@ -224,7 +224,7 @@ const headerTitleStyle = useMemo(() => ({
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={[styles.passwordInput, { fontSize: placeholderStyle.fontSize }]}
-                  placeholder="Confirm New Password"
+                  placeholder={t('change_password.confirm_password_placeholder')}
                   placeholderTextColor={'#000000'}
                   value={confirmPassword}
                   disableFullscreenUI={true}
@@ -252,7 +252,7 @@ const headerTitleStyle = useMemo(() => ({
                     if (!password) {
                       Toast.show({
                         type: 'error',
-                        text1: 'Password is required',
+                        text1: t('change_password.password_required'),
                         position: 'top',
                       });
                       return;
@@ -260,7 +260,7 @@ const headerTitleStyle = useMemo(() => ({
                     if (!confirmPassword) {
                       Toast.show({
                         type: 'error',
-                        text1: 'Confirm Password is required',
+                        text1: t('change_password.password_required'),
                         position: 'top',
                       });
                       return;
@@ -269,7 +269,7 @@ const headerTitleStyle = useMemo(() => ({
                     if (password.length < 9) {
                       Toast.show({
                         type: 'error',
-                        text1: 'Password must be at least 9 characters',
+                        text1: t('change_password.password_min_length'),
                         position: 'top',
                       });
                       return;
@@ -278,8 +278,8 @@ const headerTitleStyle = useMemo(() => ({
                     if (password !== confirmPassword) {
                       Toast.show({
                         type: 'error',
-                        text1: 'Passwords do not match',
-                        text2: 'Both passwords must be the same',
+                        text1: t('change_password.passwords_mismatch'),
+                        text2: t('change_password.passwords_mismatch_msg'),
                         position: 'top',
                       });
                       return;
@@ -288,7 +288,7 @@ const headerTitleStyle = useMemo(() => ({
                     await handleResetPassword(password, confirmPassword);
                   }}
                 >
-                  <Text style={loginTextStyle}>Save Password</Text>
+                  <Text style={loginTextStyle}>{t('change_password.save_password')}</Text>
                 </Pressable>
               </View>
               {/* <View style={styles.cancelButton} onTouchEnd={onBackPress}>

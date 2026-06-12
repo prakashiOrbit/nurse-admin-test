@@ -31,6 +31,7 @@ import { getSharedStyles } from '../../styles/sharedStyles';
 import { RouteProp, useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/AppNavigator';
+import { useTranslation } from 'react-i18next';
 
 type ParamThreshold = {
   paramName: string;
@@ -74,6 +75,7 @@ const PatientDetails: React.FC<PatientDetailsProps> = ({
   RR,
   SpO2,
 }) => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList, 'CalloutModal'>>();
@@ -282,8 +284,8 @@ const PatientDetails: React.FC<PatientDetailsProps> = ({
       const response = await startMonitoring(data);
 
       Toast.show({
-        text1: 'Start Monitoring Success',
-        text2: `Device ${deviceCode} is now being monitored.`,
+        text1: t('monitoring.start_success'),
+        text2: t('monitoring.started_msg', {deviceCode}),
         type: 'success',
       });
 
@@ -310,8 +312,8 @@ const PatientDetails: React.FC<PatientDetailsProps> = ({
       console.error('Error starting monitoring:', error);
 
       Toast.show({
-        text1: 'Start Monitoring Failed',
-        text2: 'Failed to start monitoring for device ${deviceCode}.',
+        text1: t('monitoring.start_failed'),
+        text2: t('monitoring.start_failed_msg', {deviceCode}),
         type: 'error',
       });
     }
@@ -322,15 +324,15 @@ const PatientDetails: React.FC<PatientDetailsProps> = ({
     try {
       const response = await stopMonitoring(data);
       Toast.show({
-        text1: 'Stop Monitoring Success',
-        text2: `Device ${deviceCode} monitoring has been stopped.`,
+        text1: t('monitoring.stop_success'),
+        text2: t('monitoring.stopped_msg', {deviceCode}),
         type: 'success',
       });
     } catch (error) {
       console.error('Error stopping monitoring:', error);
       Toast.show({
-        text1: 'Stop Monitoring Failed',
-        text2: `Failed to stop monitoring for device ${deviceCode}.`,
+        text1: t('monitoring.stop_failed'),
+        text2: t('monitoring.stop_failed_msg', {deviceCode}),
         type: 'error',
       });
     }
@@ -516,8 +518,8 @@ useFocusEffect(
       } catch (error: any) {
         console.log('Error fetching patient config:', error);
         Toast.show({
-          text1: 'Error',
-          text2: 'Failed to fetch patient configuration.',
+          text1: t('common.error'),
+          text2: t('monitoring.fetch_config_failed'),
           type: 'error',
         });
       } finally {
@@ -844,8 +846,8 @@ useFocusEffect(
                                     if (configLoading) return;
                                     if (!hasConfig) {
                                       Alert.alert(
-                                        'Configuration Required',
-                                        'Please configure alarm before starting monitoring',
+                                        t('monitoring.config_required'),
+                                        t('monitoring.config_required_msg'),
                                       );
                                       return;
                                     }

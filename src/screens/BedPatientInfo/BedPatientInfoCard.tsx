@@ -1,6 +1,7 @@
 // BedPatientInfoCard.tsx
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import InstructionsPanel from './InstructionsPanel';
 import NotificationPanel from './NotificationPanel';
 import ActivityLogPanel from './ActivityLogPanel';
@@ -22,6 +23,7 @@ type BedPatientInfoCardRouteParams = {
 };
 
 const BedPatientInfoCard = () => {
+  const { t } = useTranslation();
   const route = useRoute();
   // Destructure the params from navigation
   const {
@@ -71,9 +73,9 @@ const BedPatientInfoCard = () => {
           {firstName || ''} {lastName || ''}
         </Text>
         <Text style={styles.patientCode}>{patientCode || '-'}</Text>
-        <Text style={styles.age}>Age: {age || '-'}</Text>
+        <Text style={styles.age}>{t('bed_patient_info.age_label')}{age || '-'}</Text>
       </View>
-      <Text style={styles.admissionDate}>Admission date: {admissionDate}</Text>
+      <Text style={styles.admissionDate}>{t('bed_patient_info.admission_date_label')}{admissionDate}</Text>
     </View>
 
 
@@ -87,9 +89,9 @@ const BedPatientInfoCard = () => {
       </View>
 
       <View style={styles.footer}>
-        <ActionButton label="Ward Transfer" onPress={() => { /* handle ward transfer */ }} />
-        <ActionButton label="Instructions" onPress={() => { /* handle instructions */ }} />
-        <ActionButton label="Monitoring Screen" onPress={() => { /* handle monitoring screen */ }} />
+        <ActionButton label={t('bed_patient_info.ward_transfer')} onPress={() => { /* handle ward transfer */ }} />
+        <ActionButton label={t('bed_patient_info.instructions_title')} onPress={() => { /* handle instructions */ }} />
+        <ActionButton label={t('bed_patient_info.monitoring_screen')} onPress={() => { /* handle monitoring screen */ }} />
       </View>
     </View>
   );

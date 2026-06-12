@@ -11,6 +11,7 @@ import Svg, {Path, Line} from 'react-native-svg';
 import {scale, verticalScale} from '../../../utils/scaling';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {getVitalRecordsAPIForMonitoring} from '../../../services/telemetryService';
+import {useTranslation} from 'react-i18next';
 
 const {width: screenWidth} = Dimensions.get('window');
 const HEIGHT = 40;
@@ -36,6 +37,7 @@ const ECGWaveform: React.FC<ECGWaveformProps> = ({
   valueColor = '#3BE041',
   containerStyle,
 }) => {
+  const {t} = useTranslation();
   const [waveformWidth, setWaveformWidth] = useState(
     screenWidth - LABEL_WIDTH - HR_MIN_WIDTH - 24,
   );
@@ -65,7 +67,7 @@ const ECGWaveform: React.FC<ECGWaveformProps> = ({
       const now = Date.now();
       if (now - lastUpdateTime.current > 15 * 60 * 1000) {
         ToastAndroid.showWithGravity(
-          'No HR data in past 15 mins. Monitoring stopped.',
+          t('monitoring.no_hr_data'),
           ToastAndroid.LONG,
           ToastAndroid.CENTER,
         );
@@ -102,9 +104,9 @@ const ECGWaveform: React.FC<ECGWaveformProps> = ({
       } catch (err: any) {
         // console.error('Error fetching HR data:', err);
         if (err?.response?.status === 400) {
-          showToast('Monitoring stopped.');
+          showToast(t('monitoring.monitoring_stopped'));
         } else{
-          showToast('Failed to fetch vitals. Please try again.');
+          showToast(t('monitoring.fetch_vitals_failed'));
         }
       }
     };
@@ -185,7 +187,7 @@ const ECGWaveform: React.FC<ECGWaveformProps> = ({
             <Text style={[styles.hrValue, {color: valueColor}]}>
               {heartRate}
             </Text>
-            <Text style={styles.hrUnit}>bpm</Text>
+            <Text style={styles.hrUnit}>{t('monitoring.bpm_unit')}</Text>
           </View>
         </View>
       </View>

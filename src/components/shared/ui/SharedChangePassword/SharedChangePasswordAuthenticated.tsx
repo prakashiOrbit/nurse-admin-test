@@ -1,5 +1,6 @@
 import { first, set } from 'lodash';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -33,6 +34,7 @@ type SharedChangePasswordAuthenticatedProps = {
 const SharedChangePasswordAuthenticated: React.FC<
   SharedChangePasswordAuthenticatedProps
 > = ({ BackButton, eyeImage, eyeOffImage, onBackPress, onSavePassword, onForgotPasswordPress }) => {
+    const { t } = useTranslation();
     const { isTablet } = useResponsive();
     const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
 
@@ -84,7 +86,7 @@ const SharedChangePasswordAuthenticated: React.FC<
           >
             <Image source={BackButton} style={styles.backIcon} />
           </Pressable>
-          <Text style={shared.headerTitle}>Change Password</Text>
+          <Text style={shared.headerTitle}>{t('change_password_auth.title')}</Text>
         </View>
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
@@ -92,7 +94,7 @@ const SharedChangePasswordAuthenticated: React.FC<
         >
           <View style={styles.firstSection}>
             <Text style={[shared.inputLabel, { marginLeft: scale(30) }]}>
-              Current Password
+              {t('change_password_auth.current_password_label')}
             </Text>
             <View
               style={[
@@ -102,7 +104,7 @@ const SharedChangePasswordAuthenticated: React.FC<
             >
               <TextInput
                 style={[styles.passwordInput, { fontSize: shared.placeholder.fontSize }]}
-                placeholder="Enter Current Password"
+                placeholder={t('change_password_auth.current_password_placeholder')}
                 placeholderTextColor={shared.placeholder.color}
                 value={currentPassword}
                 disableFullscreenUI={true}
@@ -131,14 +133,14 @@ const SharedChangePasswordAuthenticated: React.FC<
             ) : null}
             <View style={{ marginLeft: scale(30) }}>
               <Text style={styles.forgotText} onPress={onForgotPasswordPress}>
-                Forgot Current Password?
+                {t('change_password_auth.forgot_current_password')}
               </Text>
             </View>
           </View>
           <View style={styles.firstSection}>
             <View style={styles.row}>
               <View style={styles.halfInput}>
-                <Text style={shared.inputLabel}>New Password</Text>
+                <Text style={shared.inputLabel}>{t('change_password_auth.new_password_label')}</Text>
                 <View
                   style={[
                     styles.passwordContainer,
@@ -147,7 +149,7 @@ const SharedChangePasswordAuthenticated: React.FC<
                 >
                   <TextInput
                     style={[styles.passwordInput, { fontSize: shared.placeholder.fontSize }]}
-                    placeholder="Enter New Password"
+                    placeholder={t('change_password_auth.new_password_placeholder')}
                     placeholderTextColor={shared.placeholder.color}
                     value={password}
                     disableFullscreenUI={true}
@@ -175,7 +177,7 @@ const SharedChangePasswordAuthenticated: React.FC<
               </View>
 
               <View style={styles.halfInput}>
-                <Text style={shared.inputLabel}>Confirm New Password</Text>
+                <Text style={shared.inputLabel}>{t('change_password_auth.confirm_password_label')}</Text>
                 <View
                   style={[
                     styles.passwordContainer,
@@ -184,7 +186,7 @@ const SharedChangePasswordAuthenticated: React.FC<
                 >
                   <TextInput
                     style={[styles.passwordInput, { fontSize: shared.placeholder.fontSize }]}
-                    placeholder="Confirm New Password"
+                    placeholder={t('change_password_auth.confirm_password_placeholder')}
                     placeholderTextColor={shared.placeholder.color}
                     value={confirmPassword}
                     disableFullscreenUI={true}
@@ -221,31 +223,30 @@ const SharedChangePasswordAuthenticated: React.FC<
               //   disabled={!isFormValid}
               onPress={async () => {
                 if (!currentPassword) {
-                  setCurrentPassErrorMsg('*Current Password is required');
+                  setCurrentPassErrorMsg(`*${t('change_password_auth.password_required')}`);
                   return;
                 }
                 if (!password) {
-                  setErrorMsg('*New Password is required');
+                  setErrorMsg(`*${t('change_password_auth.password_required')}`);
                   return;
                 }
                 if (!confirmPassword) {
-                  setNewPassErrorMsg('*Confirm Password is required');
+                  setNewPassErrorMsg(`*${t('change_password_auth.password_required')}`);
                   return;
                 }
 
                 if (password.length < 9) {
                   Toast.show({
                     type: 'error',
-                    text1: 'Password must be at least 9 characters',
+                    text1: t('change_password_auth.password_min_length'),
                     position: 'top',
                   });
-                  setErrorMsg('*Password must be at least 9 characters');
-                  return;
+                  setErrorMsg(`*${t('change_password_auth.password_min_length')}`);
                   return;
                 }
 
                 if (password !== confirmPassword) {
-                  setNewPassErrorMsg(`*Both password did't match`);
+                  setNewPassErrorMsg(`*${t('change_password_auth.passwords_mismatch')}`);
                   return;
                 }
                 // Handle password reset logic here
@@ -256,7 +257,7 @@ const SharedChangePasswordAuthenticated: React.FC<
                 );
               }}
             >
-              <Text style={shared.loginText}>Change Password</Text>
+              <Text style={shared.loginText}>{t('change_password_auth.button')}</Text>
             </Pressable>
           </View>
         </ScrollView>

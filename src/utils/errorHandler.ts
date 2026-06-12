@@ -1,4 +1,5 @@
 import Toast from 'react-native-toast-message';
+import i18n from '../i18n';
 
 /**
  * Handles API errors centrally
@@ -19,7 +20,7 @@ export const handleApiError = (
 
   Toast.show({
     type: 'error',
-    text1: 'Error',
+    text1: i18n.t('common.error'),
     text2: messageFromServer || fallbackMessage,
   });
 

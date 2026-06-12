@@ -25,6 +25,7 @@ import RightArrow from '../../../assets/SVGIcons/RightArrow';
 import WarningIcon from '../../../assets/SVGIcons/WarningIcon';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Path, Svg } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 
 const { width, height } = Dimensions.get('window');
 type RouteProps = RouteProp<RootStackParamList, 'ActivateMonitoring'>;
@@ -46,6 +47,7 @@ type ActivateMonitoringScreenProps = {
   }>;
 };
 const ActivateMonitoringScreen: React.FC = () => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProps>();
@@ -258,8 +260,8 @@ const ActivateMonitoringScreen: React.FC = () => {
         } catch (error: any) {
           console.log('Error fetching patient config:', error);
           Toast.show({
-            text1: 'Error',
-            text2: 'Failed to fetch patient configuration.',
+            text1: t('common.error'),
+            text2: t('monitoring.fetch_config_failed'),
             type: 'error',
           });
         }
@@ -340,8 +342,8 @@ const ActivateMonitoringScreen: React.FC = () => {
       await startMonitoring({ deviceCode });
       Toast.show({
         type: 'success',
-        text1: 'Monitoring Started',
-        text2: `Device ${deviceCode} is now active`,
+        text1: t('monitoring.started'),
+        text2: t('monitoring.started_msg', {deviceCode}),
       });
     } catch (error) {
       // 2. Rollback if failed
@@ -351,7 +353,7 @@ const ActivateMonitoringScreen: React.FC = () => {
       }));
 
       Toast.show({
-        text1: 'Failed to start monitoring',
+        text1: t('monitoring.start_failed'),
         type: 'error',
       });
     }
@@ -370,8 +372,8 @@ const ActivateMonitoringScreen: React.FC = () => {
       await stopMonitoring({ deviceCode });
       Toast.show({
         type: 'success',
-        text1: 'Monitoring Stopped',
-        text2: `Device ${deviceCode} is now inactive`,
+        text1: t('monitoring.stopped'),
+        text2: t('monitoring.stopped_msg', {deviceCode}),
       });
     } catch (error) {
       // 2. Rollback if API fails (restore previous state)
@@ -381,7 +383,7 @@ const ActivateMonitoringScreen: React.FC = () => {
       }));
 
       Toast.show({
-        text1: 'Stop Monitoring Failed',
+        text1: t('monitoring.stop_failed'),
         type: 'error',
       });
     }
@@ -595,9 +597,8 @@ const ActivateMonitoringScreen: React.FC = () => {
                                   if (!hasConfig && !isMonitoring) {
                                     Toast.show({
                                       type: 'error',
-                                      text1: 'Configuration Required',
-                                      text2:
-                                        'Please configure alarm before starting monitoring',
+                                      text1: t('monitoring.config_required'),
+                                      text2: t('monitoring.config_required_msg'),
                                     });
                                     return;
                                   }

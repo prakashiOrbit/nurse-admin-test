@@ -11,6 +11,7 @@ import {
 import { RFValue } from 'react-native-responsive-fontsize';
 import { scale, verticalScale } from 'react-native-size-matters';
 import Toast from 'react-native-toast-message';
+import { useTranslation } from 'react-i18next';
 import { admitPatient } from '../../services/nurseService';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
@@ -47,6 +48,7 @@ const AdmitPatientModalNew: React.FC<AdmitPatientModalProps> = ({
   patientInfo,
   assignedDevices,
 }) => {
+  const { t } = useTranslation();
   const [isConfirming, setIsConfirming] = useState(false);
   const { isTablet } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
@@ -149,7 +151,7 @@ const AdmitPatientModalNew: React.FC<AdmitPatientModalProps> = ({
       };
       await admitPatient(data);
       Toast.show({
-        text1: 'Patient Admitted',
+        text1: t('admit_patient.admitted_toast'),
         text2: `${patientInfo.firstName} ${patientInfo.lastName} admitted successfully`,
         type: 'success',
       });
@@ -161,11 +163,11 @@ const AdmitPatientModalNew: React.FC<AdmitPatientModalProps> = ({
     } catch (error) {
       console.error('Error admitting patient:', error);
       Toast.show({
-        text1: 'Admit Failed',
+        text1: t('admit_patient.admit_failed'),
         text2: JSON.stringify(error),
         type: 'error',
       });
-      Alert.alert('Error', 'Failed to admit patient. Please try again.');
+      Alert.alert(t('common.error'), t('admit_patient.admit_failed_msg'));
     } finally {
       setIsConfirming(false);
     }
@@ -189,7 +191,7 @@ const AdmitPatientModalNew: React.FC<AdmitPatientModalProps> = ({
         <View style={[styles.card, { width: cardWidth }]}>
           <View style={styles.header}>
             <Text style={titleStyle}>
-              Admit New Patient to Bed{'  '}
+              {t('admit_patient.title')}{'  '}
               <Text style={[titleStyle, styles.bedCode]}>
                 {patientInfo?.bedCode}
               </Text>
@@ -207,22 +209,22 @@ const AdmitPatientModalNew: React.FC<AdmitPatientModalProps> = ({
             <View style={styles.infoSection}>
               <View style={{ width: '100%' }}>
                 <InfoRow
-                  label="Patient Name"
+                  label={t('admit_patient.patient_name')}
                   value={`${patientInfo.firstName} ${patientInfo.lastName}`}
                   labelStyle={labelStyle}
                   valueStyle={valueStyle}
                   colonStyle={colonStyle}
                 />
                 <InfoRow
-                  label="MRN No"
+                  label={t('admit_patient.mrn_no')}
                   value={patientInfo.mrNumber}
                   labelStyle={labelStyle}
                   valueStyle={valueStyle}
                   colonStyle={colonStyle}
                 />
                 <InfoRow
-                  label="Age, Gender"
-                  value={`${patientInfo.age} yrs, ${patientInfo.gender}`}
+                  label={t('admit_patient.age_gender')}
+                  value={`${patientInfo.age} ${t('common.age_suffix')}, ${patientInfo.gender}`}
                   labelStyle={labelStyle}
                   valueStyle={valueStyle}
                   colonStyle={colonStyle}
@@ -232,7 +234,7 @@ const AdmitPatientModalNew: React.FC<AdmitPatientModalProps> = ({
           ) : (
             <View style={styles.emptyState}>
               <Text style={styles.emptyText}>
-                No patient assigned to this bed
+                {t('admit_patient.no_patient')}
               </Text>
             </View>
           )}
@@ -247,7 +249,7 @@ const AdmitPatientModalNew: React.FC<AdmitPatientModalProps> = ({
             ]}
           >
             <Text style={confirmTextStyle}>
-              {isConfirming ? 'Confirming...' : 'Confirm Admission'}
+              {isConfirming ? t('admit_patient.confirming') : t('admit_patient.confirm_admission')}
             </Text>
           </TouchableOpacity>
         </View>

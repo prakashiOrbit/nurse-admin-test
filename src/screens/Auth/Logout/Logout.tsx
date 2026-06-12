@@ -4,6 +4,7 @@ import SharedLogout from '../../../components/shared/ui/SharedLogout/SharedLogou
 import ConfirmLogout from './ConfirmLogout';
 import { logoutAPI } from '../../../services/authService';
 import Toast from 'react-native-toast-message';
+import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { clearAuthSession } from '../../../services/sessionService';
@@ -15,6 +16,7 @@ const LockIMG = require('../../../../assets/icons/lock.png');
 const LogoutBTN = require('../../../../assets/icons/exit.png');
 const ConfirmLogoutIMG = require('../../../../assets/icons/confirmLogout.png');
 const Logout: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const { t } = useTranslation();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -46,7 +48,7 @@ const Logout: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
       Toast.show({
         type: 'success',
-        text1: 'Logged out successfully',
+        text1: t('confirm_logout.logged_out'),
       });
 
       setShowConfirm(false);
@@ -54,7 +56,7 @@ const Logout: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     } catch {
       Toast.show({
         type: 'error',
-        text1: 'Logout Failed',
+        text1: t('confirm_logout.logout_failed'),
       });
     }
   };

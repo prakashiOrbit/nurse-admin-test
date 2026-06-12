@@ -11,6 +11,8 @@ import { configureGoogleSignIn } from './src/utils/googleAuth';
 import NetworkProvider from './src/context/NetworkProvider';
 import { toastConfig } from './src/config/ToastConfig';
 import Orientation from 'react-native-orientation-locker';
+import './src/i18n';
+import { restoreLanguage } from './src/i18n';
 
 configureGoogleSignIn();
 enableScreens();
@@ -21,6 +23,7 @@ export default function App() {
     // navigateWhenReady() in the interceptor handles that internally
     setupAxiosInterceptors();
     Orientation.lockToLandscape();
+    restoreLanguage();
   }, []);
 
   return (

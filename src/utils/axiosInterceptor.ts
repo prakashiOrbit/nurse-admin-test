@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { navigateWhenReady } from '../navigation/navigationService';
 import Toast from 'react-native-toast-message';
 import { privateApi } from '../services/privateApi';
+import i18n from '../i18n';
 
 let sessionExpiryPromise: Promise<void> | null = null;
 
@@ -30,8 +31,8 @@ export const setupAxiosInterceptors = () => {
           try {
             Toast.show({
               type: 'error',
-              text1: 'Session Expired',
-              text2: 'Please login again.',
+              text1: i18n.t('common.session_expired'),
+              text2: i18n.t('common.please_login_again'),
             });
 
             // Step 1: Clear storage independently — don't let failure block navigation

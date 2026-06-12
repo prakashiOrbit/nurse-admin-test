@@ -11,6 +11,7 @@ import {
   Pressable,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { useTranslation } from 'react-i18next';
 import DynamicSvg from '../../components/DynamicSvg';
 import { getBedPatientInfo, getWardSVG, getCurrentShift } from '../../services/nurseService';
 import { assignedDevices } from '../../services/bedService';
@@ -38,6 +39,7 @@ LogBox.ignoreLogs(['Each child in a list should have a unique "key" prop.']);
 LogBox.ignoreLogs(['Text strings must be rendered within a <Text> component.']);
 
 const HomeScreen = () => {
+  const { t } = useTranslation();
   const isConnected = useContext(NetworkContext).isConnected;
 
   const [currentColor, setCurrentColor] = useState('#ffffff');
@@ -96,8 +98,8 @@ const HomeScreen = () => {
       if (!bedPatientResponse || !bedPatientResponse.bedCode) {
         Toast.show({
           type: 'error',
-          text1: 'Patient Details Not Available',
-          text2: 'Patient details could not be loaded. Please try again.',
+          text1: t('home.patient_details_not_available'),
+          text2: t('home.patient_details_not_available_msg'),
         });
         return; // Stop here – don’t open modal
       }
@@ -123,8 +125,8 @@ const HomeScreen = () => {
     } catch (error: any) {
       Toast.show({
         type: 'error',
-        text1: 'This bed is empty.',
-        text2: 'No patient is assigned to this bed.',
+        text1: t('home.bed_empty'),
+        text2: t('home.bed_empty_msg'),
       });
     }
   };
@@ -208,8 +210,8 @@ const HomeScreen = () => {
       if (!svgRes?.svgFile) {
         Toast.show({
           type: 'error',
-          text1: 'SVG Not Found',
-          text2: 'Please add SVG for the respective ward.',
+          text1: t('home.svg_not_found'),
+          text2: t('home.svg_not_found_msg'),
         });
         setSvgXml(null);
         return;
@@ -222,8 +224,8 @@ const HomeScreen = () => {
       if (e?.response?.data?.message === 'No shift created for this time') {
         Toast.show({
           type: 'error',
-          text1: 'No Active Shift',
-          text2: 'Nurse is not assigned to any shift.',
+          text1: t('home.no_active_shift'),
+          text2: t('home.no_active_shift_msg'),
         });
         setSvgXml(null);
       }
@@ -231,8 +233,8 @@ const HomeScreen = () => {
       else {
         Toast.show({
           type: 'error',
-          text1: 'SVG Not Found',
-          text2: 'Please add SVG for the respective ward.',
+          text1: t('home.svg_not_found'),
+          text2: t('home.svg_not_found_msg'),
         });
         setSvgXml(null);
       }
@@ -299,8 +301,8 @@ const HomeScreen = () => {
           setSessionReady(false);
           Toast.show({
             type: 'info',
-            text1: 'Shift Ended',
-            text2: 'Your shift has ended.',
+            text1: t('home.shift_ended'),
+            text2: t('home.shift_ended_msg'),
           });
         }
       }
@@ -377,8 +379,8 @@ const HomeScreen = () => {
                   if (targetForWardTransferBeds.includes(bedCode)) {
                     Toast.show({
                       type: 'info',
-                      text1: 'Patient Transfer In Progress',
-                      text2: 'The patient is being transferred to this bed.',
+                      text1: t('home.transfer_in_progress'),
+                      text2: t('home.transfer_in_progress_msg'),
                     });
                     return;
                   }
@@ -392,8 +394,8 @@ const HomeScreen = () => {
                   if (!hasAccess) {
                     Toast.show({
                       type: 'error',
-                      text1: 'Access Denied',
-                      text2: 'You do not have access to this patient.',
+                      text1: t('home.access_denied'),
+                      text2: t('home.access_denied_msg'),
                     });
                     return;
                   }
@@ -415,7 +417,7 @@ const HomeScreen = () => {
                   reconnect();
                 }}
               >
-                <Text style={styles.retryButtonText}>Retry</Text>
+                <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
               </TouchableOpacity>
             )}
           </ReactNativeZoomableView>

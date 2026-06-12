@@ -2,6 +2,7 @@
 // Replaces 5-second polling of POST /ward/dashboard
 // with a persistent GET /dashboard/stream connection.
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import EventSource, { EventSourceListener } from 'react-native-sse';
 import { createDashboardStream } from '../services/streamService/streamService';
 import { setDashboardStream } from '../services/streamService/dashboardStreamManager';
@@ -33,6 +34,7 @@ interface UseWardDashboardResult {
 export const useWardDashboard = (
   { enabled }: UseWardDashboardOptions,
 ): UseWardDashboardResult => {
+  const { t } = useTranslation();
 
   const [data,      setData]      = useState<WardDashboardData | null>(null);
   const [connected, setConnected] = useState(false);
@@ -95,7 +97,7 @@ const connect = useCallback(async () => {
       console.warn('[useWardDashboard] SSE error:', status);
 
       if (status === 401 || status === 403) {
-        setError('Session expired');
+        setError(t('common.session_expired'));
 
         closeStream();
 
@@ -103,7 +105,7 @@ const connect = useCallback(async () => {
       }
 
       setConnected(false);
-      setError('Connection interrupted — reconnecting…');
+      setError(t('ward.connection_interrupted'));
     };
 
     es.addEventListener('open', onOpen);
@@ -113,7 +115,7 @@ const connect = useCallback(async () => {
   } catch (e: any) {
     console.log('[useWardDashboard] connect error:', e);
 
-    setError(e?.message || 'Failed to connect');
+    setError(e?.message || t('ward.failed_to_connect'));
   }
 
 }, [enabled, closeStream]);

@@ -5,11 +5,15 @@ import Logout from '../screens/Auth/Logout/Logout';
 import { getSharedStyles } from '../styles/sharedStyles';
 import { useResponsive } from '../utils/responsive';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
+import { LanguageSheet } from './LanguageSheet';
 
 const MenuIconbutton = require('../../assets/icons/Group2.png');
 
 export const Header = ({ onMenuPress }: { onMenuPress: () => void }) => {
+  const { t } = useTranslation();
   const [showLogout, setShowLogout] = useState(false);
+  const [showLangSheet, setShowLangSheet] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const { isTablet } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
@@ -114,14 +118,18 @@ export const Header = ({ onMenuPress }: { onMenuPress: () => void }) => {
           <Pressable onPress={onMenuPress}>
             <Image source={MenuIconbutton} style={menuIconStyle} />
           </Pressable>
-          <Text style={titleStyle}>iTouch Nurse</Text>
+          <Text style={titleStyle}>{t('header.app_title')}</Text>
         </View>
 
         <View style={styles.headerRight}>
           <Text style={dateStyle}>{getFormattedDate()}</Text>
           <Text style={timeStyle}>{currentTime}</Text>
+          <Pressable onPress={() => setShowLangSheet(true)} style={styles.globeBtn} hitSlop={8}>
+            <Text style={styles.globeIcon}>🌐</Text>
+          </Pressable>
         </View>
       </View>
+      <LanguageSheet visible={showLangSheet} onClose={() => setShowLangSheet(false)} />
 
       {/* {showLogout && (
         <>
@@ -179,6 +187,13 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: fontScale(14),
+  },
+  globeBtn: {
+    marginLeft: scale(8),
+    padding: scale(2),
+  },
+  globeIcon: {
+    fontSize: RFValue(16),
   },
 
   /* Overlay */

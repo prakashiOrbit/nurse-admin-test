@@ -32,6 +32,7 @@ import MonitoringScreen from '../../features/monitoring/MonitoringScreen';
 import PatientInstructions from '../../screens/PatientsComponents/PatientInstructions';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
+import { useTranslation } from 'react-i18next';
 
 export const fetchMonitorMetadata = async (
   violatedParam: string,
@@ -90,6 +91,7 @@ const NotificationCallOutModal: React.FC<NotificationCallOutModalProps> = ({
   bedPatientInfo,
   raisedAlarm,
 }) => {
+  const { t } = useTranslation();
   const { isTablet, wp, hp } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
   const [selectedTab, setSelectedTab] = useState<
@@ -568,7 +570,7 @@ const NotificationCallOutModal: React.FC<NotificationCallOutModalProps> = ({
                               data={transformVitalsData(vitalsData)}
                             />
                           ) : (
-                            <Text>No data available</Text>
+                            <Text>{t('callout.no_data')}</Text>
                           )}
                         </View>
                         <View style={styles.alarmParam}>
@@ -591,7 +593,7 @@ const NotificationCallOutModal: React.FC<NotificationCallOutModalProps> = ({
                           source={InstructionsVector}
                           style={styles.instructionIcon}
                         />
-                        <Text style={instructionHeaderStyle}>Instructions</Text>
+                        <Text style={instructionHeaderStyle}>{t('common.instructions')}</Text>
                       </View>
                       <Animated.ScrollView
                         style={{ maxHeight: 250 }} // adjust if needed
@@ -640,7 +642,7 @@ const NotificationCallOutModal: React.FC<NotificationCallOutModalProps> = ({
                               { color: '#4CAE51' },
                             ]}
                           >
-                            Send To Doctor
+                            {t('callout.send_to_doctor')}
                           </Text>
                         </View>
                       </View>
@@ -649,7 +651,7 @@ const NotificationCallOutModal: React.FC<NotificationCallOutModalProps> = ({
                   </TouchableOpacity> */}
                       <View>
                         <Text style={styles.upcomingFeature}>
-                          Upcoming Feature
+                          {t('callout.upcoming_feature')}
                         </Text>
                       </View>
                     </View>
@@ -668,12 +670,12 @@ const NotificationCallOutModal: React.FC<NotificationCallOutModalProps> = ({
                               { color: '#4CAE51' },
                             ]}
                           >
-                            Delegate
+                            {t('callout.delegate')}
                           </Text>
                         </View>
                         <View>
                           <Text style={styles.upcomingFeature}>
-                            Upcoming Feature
+                            {t('callout.upcoming_feature')}
                           </Text>
                         </View>
                       </View>
@@ -700,25 +702,25 @@ const NotificationCallOutModal: React.FC<NotificationCallOutModalProps> = ({
               </View>
               <View style={styles.buttonRow}>
                 <ActionButton
-                  label="Monitoring Screen"
+                  label={t('callout.monitoring_screen')}
                   icon={MonitoringVector}
                   onPress={() => setSelectedTab('monitoring')}
                   isActive={selectedTab === 'monitoring'}
                 />
                 <ActionButton
-                  label="Instructions"
+                  label={t('common.instructions')}
                   icon={InstructionsVector}
                   onPress={() => setSelectedTab('instructions')}
                   isActive={selectedTab === 'instructions'}
                 />
                 <ActionButton
-                  label="Doctor"
+                  label={t('callout.doctor')}
                   icon={DoctorVector}
                   onPress={() => setSelectedTab('moveout')}
                   isActive={selectedTab === 'moveout'}
                 />
                 <ActionButton
-                  label="Delegate"
+                  label={t('callout.delegate')}
                   icon={DelegateVector}
                   onPress={async () => {
                     setSelectedTab('delegate');

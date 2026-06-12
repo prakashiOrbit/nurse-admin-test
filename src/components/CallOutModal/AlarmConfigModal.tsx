@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { scale, verticalScale } from '../../utils/scaling';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 
 type ParamThreshold = {
   paramName: string;
@@ -30,6 +31,7 @@ const AlarmConfigModal: React.FC<Props> = ({
   onSave,
   paramThresholds,
 }) => {
+  const { t } = useTranslation();
   const [thresholds, setThresholds] =
     React.useState<ParamThreshold[]>(paramThresholds);
 
@@ -61,7 +63,7 @@ const AlarmConfigModal: React.FC<Props> = ({
         <View style={styles.modalBox}>
           {/* Header */}
           <View style={styles.configHeader}>
-            <Text style={styles.title}>Alarm Configuration</Text>
+            <Text style={styles.title}>{t('alarm.config_title')}</Text>
             {onClose && (
               <TouchableOpacity onPress={onClose} style={styles.backArrow}>
                 <Text style={styles.closeText}>✕</Text>
@@ -73,7 +75,7 @@ const AlarmConfigModal: React.FC<Props> = ({
           <View style={styles.tabContainer}>
             <TouchableOpacity style={[styles.tabButton, styles.activeTab]}>
               <Text style={[styles.tabText, styles.activeTabText]}>
-                Patient Monitoring
+                {t('alarm.patient_monitoring')}
               </Text>
             </TouchableOpacity>
             {/* <TouchableOpacity style={styles.tabButton}>
@@ -87,9 +89,9 @@ const AlarmConfigModal: React.FC<Props> = ({
           {/* Scrollable Parameter Section */}
           <ScrollView style={styles.scrollArea}>
             <View style={[styles.row, styles.headerRow]}>
-              <Text style={[styles.headerText]}>Parameters</Text>
-              <Text style={[styles.headerText]}>Lower limit</Text>
-              <Text style={[styles.headerText]}>Upper limit</Text>
+              <Text style={[styles.headerText]}>{t('alarm.parameters')}</Text>
+              <Text style={[styles.headerText]}>{t('alarm.lower_limit')}</Text>
+              <Text style={[styles.headerText]}>{t('alarm.upper_limit')}</Text>
             </View>
 
             {thresholds.map((param, index) => (
@@ -97,7 +99,7 @@ const AlarmConfigModal: React.FC<Props> = ({
                 <Text style={styles.paramName}>{param.paramName}</Text>
                 <TextInput
                   style={[styles.flexInput, { borderColor: '#f44336' }]}
-                  placeholder="Low"
+                  placeholder={t('alarm.low_placeholder')}
                   keyboardType="numeric"
                   disableFullscreenUI={true}
                   value={param.low?.toString() || ''}
@@ -105,7 +107,7 @@ const AlarmConfigModal: React.FC<Props> = ({
                 />
                 <TextInput
                   style={[styles.flexInput, { borderColor: '#4CAF50' }]}
-                  placeholder="High"
+                  placeholder={t('alarm.high_placeholder')}
                   keyboardType="numeric"
                   disableFullscreenUI={true}
                   value={param.high?.toString() || ''}

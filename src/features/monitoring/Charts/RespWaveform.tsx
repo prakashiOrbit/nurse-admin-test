@@ -11,6 +11,7 @@ import Svg, {Path, Line} from 'react-native-svg';
 import {scale, verticalScale} from '../../../utils/scaling';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {getVitalRecordsAPIForMonitoring} from '../../../services/telemetryService';
+import {useTranslation} from 'react-i18next';
 
 const {width: screenWidth} = Dimensions.get('window');
 const HEIGHT = 40;
@@ -36,6 +37,7 @@ const RespWaveform: React.FC<RespWaveformProps> = ({
   valueColor = '#FFA500',
   containerStyle,
 }) => {
+  const {t} = useTranslation();
   const [waveformWidth, setWaveformWidth] = useState(
     screenWidth - LABEL_WIDTH - RR_MIN_WIDTH - 24,
   );
@@ -92,9 +94,9 @@ const RespWaveform: React.FC<RespWaveformProps> = ({
         // console.error("Error fetching RR data:", err);
 
         if (err?.response?.status === 400) {
-          showToast('Monitoring stopped.');
+          showToast(t('monitoring.monitoring_stopped'));
         } else{
-          showToast('Failed to fetch vitals. Please try again.');
+          showToast(t('monitoring.fetch_vitals_failed'));
         }
 
         resetRespData();
@@ -175,7 +177,7 @@ const RespWaveform: React.FC<RespWaveformProps> = ({
             <Text style={[styles.rrValue, {color: valueColor}]}>
               {respRate}
             </Text>
-            <Text style={styles.rrUnit}>rpm</Text>
+            <Text style={styles.rrUnit}>{t('monitoring.rpm_unit')}</Text>
           </View>
         </View>
       </View>

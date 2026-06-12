@@ -8,10 +8,11 @@ import {
   Dimensions,
   Alert
 } from "react-native";
-import { admitPatient } from "../../services/nurseService"; 
+import { admitPatient } from "../../services/nurseService";
 import Toast from "react-native-toast-message";
 import { useNavigation } from "@react-navigation/native";
 import { fontScale, scale, verticalScale } from "../../utils/scaling";
+import { useTranslation } from "react-i18next";
 
 type ConfirmWithoutMonitoringModalProps = {
   visible: boolean;
@@ -28,6 +29,7 @@ const ConfirmWithoutMonitoringModal: React.FC<ConfirmWithoutMonitoringModalProps
   patientCode,
   bedCode,
 }) => {
+  const { t } = useTranslation();
   const { width, height } = Dimensions.get("window");
   const modalWidth = width * 0.5;
   const modalHeight = height * 0.5;
@@ -38,11 +40,11 @@ const ConfirmWithoutMonitoringModal: React.FC<ConfirmWithoutMonitoringModalProps
   try {
     await admitPatient({ patientCode, bedCode });
     Toast.show({
-      text1: "Patient Admitted",
-      text2: `Patient ${patientCode} admitted without monitoring`,
+      text1: t('admit_patient.admitted_toast'),
+      text2: t('admit_patient.admitted_without_msg'),
       type: "success",
     });
-    Alert.alert("Success", `Patient ${patientCode} admitted without monitoring`);
+    Alert.alert(t('common.success'), t('admit_patient.admitted_without_msg'));
     onProceed();
     navigation.reset({
         index: 0,
@@ -51,11 +53,11 @@ const ConfirmWithoutMonitoringModal: React.FC<ConfirmWithoutMonitoringModalProps
   } catch (error) {
     console.error("Error admitting patient without monitoring:", error);
     Toast.show({
-      text1: "Admit Failed",
+      text1: t('admit_patient.admit_failed'),
       text2: JSON.stringify(error),
       type: "error",
     });
-    Alert.alert("Error", `Failed to admit patient ${patientCode}`);
+    Alert.alert(t('common.error'), t('admit_patient.admit_error_msg'));
   }
 };
 
@@ -66,19 +68,19 @@ const ConfirmWithoutMonitoringModal: React.FC<ConfirmWithoutMonitoringModalProps
         <View style={[styles.confirmBox, { width: modalWidth, height: modalHeight }]}>
           {/* Centered Content */}
           <View style={styles.content}>
-            <Text style={styles.title}>Patient assigned without active monitoring</Text>
+            <Text style={styles.title}>{t('admit_patient.no_monitoring_title')}</Text>
             <Text style={styles.subtitle}>
-              No monitoring devices have been started for this patient.
+              {t('admit_patient.no_monitoring_msg')}
             </Text>
           </View>
 
           {/* Sticky Bottom Buttons */}
           <View style={styles.actionRow}>
             <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
-              <Text style={styles.cancelText}>Go Back</Text>
+              <Text style={styles.cancelText}>{t('admit_patient.go_back')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.confirmBtn} onPress={handleProceed}>
-              <Text style={styles.confirmText}>Proceed without Monitoring</Text>
+              <Text style={styles.confirmText}>{t('admit_patient.proceed_without_monitoring')}</Text>
             </TouchableOpacity>
           </View>
         </View>

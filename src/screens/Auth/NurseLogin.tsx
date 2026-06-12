@@ -1,8 +1,10 @@
 // nurse-app/screens/NurseLoginScreen.tsx
 import SharedLoginScreen from '../../components/shared/ui/SharedLoginScreen';
 import { mobileNumberLoginAPI } from '../../services/authService';
+import { useTranslation } from 'react-i18next';
 
 const NurseLogin = () => {
+  const { t } = useTranslation();
   return (
         // <SharedLoginScreen1
         // title="iTouch Nurse"
@@ -12,8 +14,8 @@ const NurseLogin = () => {
         // onLogin={(username, password) => loginNurse({ userName: username, password })}
         // />
         <SharedLoginScreen
-        title="iTouch Nurse"
-        description="An ICU app for nurses to monitor real-time vitals, receive doctor instructions, manage shift handovers and respond quickly to critical alerts for safer patient care."
+        title={t('auth.app_title')}
+        description={t('auth.app_description')}
         imageSource={require('../../../assets/images/nurse_img.png')}
         onLogin={async (mobileNumber, countryCode) => {
         const fullNumber = countryCode + mobileNumber;

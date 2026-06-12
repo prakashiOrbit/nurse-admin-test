@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { scale } from '../../../../utils/scaling';
+import { useTranslation } from 'react-i18next';
 
 type SharedLogoutProps = {
   LockIMG: any;
@@ -17,18 +18,19 @@ const SharedLogout: React.FC<SharedLogoutProps> = ({
   onLogoutPress,
   onChangePasswordPress,
 }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.row} onPress={onChangePasswordPress}>
         <Image source={LockIMG} style={styles.icon} />
-        <Text style={styles.text}>Change Password</Text>
+        <Text style={styles.text}>{t('logout_menu.change_password')}</Text>
       </TouchableOpacity>
 
       <View style={styles.divider} />
 
       <TouchableOpacity style={styles.row} onPress={onLogoutPress}>
         <Image source={LogoutBTN} style={styles.icon} />
-        <Text style={styles.text}>Logout</Text>
+        <Text style={styles.text}>{t('logout_menu.logout')}</Text>
       </TouchableOpacity>
     </View>
   );

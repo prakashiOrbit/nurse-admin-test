@@ -20,6 +20,7 @@ import { fontScale, scale, verticalScale } from '../../utils/scaling';
 import { useResponsive } from '../../utils/responsive';
 import { getSharedStyles } from '../../styles/sharedStyles';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 
 type WardTransferAndDischargeProps = {
   visible: boolean;
@@ -42,6 +43,7 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
   patientInfo,
   assignedDevices = [],
 }) => {
+  const { t } = useTranslation();
   const { isTablet, wp, hp } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
 
@@ -115,54 +117,38 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
   const handleStartMonitoring = async (deviceCode: string) => {
     const data = { deviceCode };
     try {
-      const response = await startMonitoring(data);
+      await startMonitoring(data);
       Toast.show({
-        text1: 'Monitoring Started',
-        // text2: JSON.stringify(response),
+        text1: t('monitoring.started'),
         type: 'success',
       });
-      Alert.alert(
-        'Monitoring Started',
-        `Device ${deviceCode} is now being monitored.`,
-      );
+      Alert.alert(t('monitoring.started'), t('monitoring.started_msg', {deviceCode}));
     } catch (error) {
       console.error('Error starting monitoring:', error);
       Toast.show({
-        text1: 'Start Monitoring Failed',
-        // text2: JSON.stringify(error),
+        text1: t('monitoring.start_failed'),
         type: 'error',
       });
-      Alert.alert(
-        'Error',
-        `Failed to start monitoring for device ${deviceCode}.`,
-      );
+      Alert.alert(t('common.error'), t('monitoring.start_failed_msg', {deviceCode}));
     }
   };
 
   const handleStopMonitoring = async (deviceCode: string) => {
     const data = { deviceCode };
     try {
-      const response = await stopMonitoring(data);
+      await stopMonitoring(data);
       Toast.show({
-        text1: 'Monitoring Stopped',
-        // text2: JSON.stringify(response),
+        text1: t('monitoring.stopped'),
         type: 'success',
       });
-      Alert.alert(
-        'Monitoring Stopped',
-        `Device ${deviceCode} monitoring has been stopped.`,
-      );
+      Alert.alert(t('monitoring.stopped'), t('monitoring.stopped_msg', {deviceCode}));
     } catch (error) {
       console.error('Error stopping monitoring:', error);
       Toast.show({
-        text1: 'Stop Monitoring Failed',
-        // text2: JSON.stringify(error),
+        text1: t('monitoring.stop_failed'),
         type: 'error',
       });
-      Alert.alert(
-        'Error',
-        `Failed to stop monitoring for device ${deviceCode}.`,
-      );
+      Alert.alert(t('common.error'), t('monitoring.stop_failed_msg', {deviceCode}));
     }
   };
 
@@ -176,17 +162,14 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
         patientCode: patientCode,
       };
       const response = await dischargePatient(payload);
-      // Alert.alert('Success', 'Patient Discharged Successfully');
       Toast.show({
-        text1: 'Patient Discharged Successfully',
-        // text2: JSON.stringify(response),
+        text1: t('ward_transfer_modal.discharged'),
         type: 'success',
       });
       return response;
     } catch (error: any) {
       Toast.show({
-        text1: 'Discharge Failed',
-        // text2: JSON.stringify(error),
+        text1: t('ward_transfer_modal.discharge_failed'),
         type: 'error',
       });
       throw error;
@@ -204,15 +187,13 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
       };
       const response = await wardTransferPatient(payload);
       Toast.show({
-        text1: 'Patient Transferred Successfully',
-        // text2: JSON.stringify(response),
+        text1: t('ward_transfer_modal.transferred'),
         type: 'success',
       });
       return response;
     } catch (error: any) {
       Toast.show({
-        text1: 'Ward Transfer Failed',
-        // text2: JSON.stringify(error),
+        text1: t('ward_transfer_modal.transfer_failed'),
         type: 'error',
       });
       throw error;
@@ -316,9 +297,9 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
         >
           <Text style={containerStyle}>
             {patientStatus === 'TRANSFER INITIATED'
-              ? 'Ward Transfer'
+              ? t('ward_transfer_modal.title_transfer')
               : patientStatus === 'DISCHARGE INITIATED'
-              ? 'Discharge'
+              ? t('ward_transfer_modal.title_discharge')
               : ''}
           </Text>
           {patientInfo != null ? (
@@ -326,7 +307,7 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
               <View style={styles.parent}>
                 <View style={styles.left}>
                   <View style={styles.patientInfo}>
-                    <Text style={labelStyle}>Patient Name</Text>
+                    <Text style={labelStyle}>{t('admit_patient.patient_name')}</Text>
                     <Text style={colonStyle}>:</Text>
                     <Text style={valueStyle}>
                       {patientInfo.firstName} {patientInfo.lastName}
@@ -334,22 +315,22 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
                   </View>
 
                   <View style={styles.patientInfo}>
-                    <Text style={labelStyle}>Bed no</Text>
+                    <Text style={labelStyle}>{t('ward_transfer_modal.bed_no')}</Text>
                     <Text style={colonStyle}>:</Text>
                     <Text style={valueStyle}>{patientInfo.bedCode}</Text>
                   </View>
 
                   <View style={styles.patientInfo}>
-                    <Text style={labelStyle}>Age</Text>
+                    <Text style={labelStyle}>{t('common.age_label')}</Text>
                     <Text style={colonStyle}>:</Text>
-                    <Text style={valueStyle}>{patientInfo.age} yrs</Text>
+                    <Text style={valueStyle}>{patientInfo.age} {t('common.age_suffix')}</Text>
                   </View>
                 </View>
               </View>
             </>
           ) : (
             <>
-              <Text>No patient is Assigned to this Bed</Text>
+              <Text>{t('ward_transfer_modal.no_patient')}</Text>
             </>
           )}
 
@@ -369,7 +350,7 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
               {assignedDevices.length > 0 ? (
                 <View style={styles.deviceSection}>
                   <View style={styles.deviceColumn}>
-                    <Text style={subTextStyle}>Stop Monitoring</Text>
+                    <Text style={subTextStyle}>{t('monitoring.stop_section')}</Text>
                     {assignedDevices.map((device, index) => {
                       const isSelected = selectedDevices.includes(
                         device.deviceCode,
@@ -415,7 +396,7 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
                   </View>
                 </View>
               ) : (
-                <Text>No devices assigned to this patient</Text>
+                <Text>{t('monitoring.no_devices')}</Text>
               )}
             </Animated.ScrollView>
 
@@ -434,7 +415,7 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
           {/* Action Buttons */}
           <View style={styles.actionRow}>
             <TouchableOpacity style={styles.cancelBtn} onPress={onClose}>
-              <Text style={cancelTextStyle}>Cancel</Text>
+              <Text style={cancelTextStyle}>{t('common.cancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.confirmBtn}
@@ -444,8 +425,8 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
                 ).some(status => status === true);
                 if (isAnyMonitoringActive) {
                   Alert.alert(
-                    'Monitoring Active',
-                    'Please stop monitoring for all devices before proceeding with Ward Transfer or Discharge.',
+                    t('monitoring.active'),
+                    t('ward_transfer_modal.monitoring_active_msg'),
                   );
                   return; // stop further execution
                 }
@@ -466,10 +447,10 @@ const WardTransferAndDischarge: React.FC<WardTransferAndDischargeProps> = ({
             >
               <Text style={confirmTextStyle}>
                 {patientStatus === 'TRANSFER INITIATED'
-                  ? 'Ward Transfer'
+                  ? t('ward_transfer_modal.title_transfer')
                   : patientStatus === 'DISCHARGE INITIATED'
-                  ? 'Discharge'
-                  : 'Confirm'}
+                  ? t('ward_transfer_modal.title_discharge')
+                  : t('ward_transfer_modal.confirm')}
               </Text>
             </TouchableOpacity>
           </View>

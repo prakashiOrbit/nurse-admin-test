@@ -4,6 +4,7 @@ import { scale, verticalScale, fontScale } from '../../../utils/scaling';
 import { useResponsive } from '../../../utils/responsive';
 import { getSharedStyles } from '../../../styles/sharedStyles';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTranslation } from 'react-i18next';
 
 type ConfirmLogoutProps = {
   onConfirm: () => void;
@@ -16,6 +17,7 @@ const ConfirmLogout: React.FC<ConfirmLogoutProps> = ({
   onCancel,
   LogoutImage,
 }) => {
+  const { t } = useTranslation();
   const { isTablet, wp, hp } = useResponsive();
   const shared = useMemo(() => getSharedStyles(isTablet), [isTablet]);
 
@@ -78,16 +80,16 @@ const ConfirmLogout: React.FC<ConfirmLogoutProps> = ({
     <View style={containerStyle}>
       <Image source={LogoutImage} style={styles.icon} />
 
-      <Text style={titleStyle}>Confirm Logout</Text>
-      <Text style={subTitleStyle}>Are you sure you want to Logout?</Text>
+      <Text style={titleStyle}>{t('confirm_logout.title')}</Text>
+      <Text style={subTitleStyle}>{t('confirm_logout.message')}</Text>
 
       <View style={styles.actions}>
         <Pressable onPress={onCancel}>
-          <Text style={cancelStyle}>Cancel</Text>
+          <Text style={cancelStyle}>{t('confirm_logout.cancel')}</Text>
         </Pressable>
 
         <Pressable onPress={onConfirm}>
-          <Text style={confirmStyle}>Yes</Text>
+          <Text style={confirmStyle}>{t('confirm_logout.confirm')}</Text>
         </Pressable>
       </View>
     </View>
