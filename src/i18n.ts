@@ -15,7 +15,7 @@ import ar from './assets/locales/ar.json';
 
 export const LOCALE_STORAGE_KEY = 'preferred_locale';
 
-i18n.use(initReactI18next).init({
+export const i18nInitPromise = i18n.use(initReactI18next).init({
   resources: {
     en: {translation: en},
     fr: {translation: fr},
@@ -32,7 +32,6 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-  initImmediate: false,
   react: {
     useSuspense: false,
   },
