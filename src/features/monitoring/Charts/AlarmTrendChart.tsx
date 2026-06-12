@@ -235,33 +235,19 @@ const AlarmTrendChart: React.FC<AlarmTrendChartProps> = ({
   // -------------------------------
   // X Axis labels (minutes)
   // -------------------------------
-  const labels = [];
-  let t = Math.floor(chartBounds.start / 60000) * 60000;
-  while (t <= chartBounds.end) {
-    labels.push(
-      new Date(t).toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      }),
-    );
-    t += 60000;
-  }
-
-  // const stepX = labels.length > 1 ? svgWidth / (labels.length - 1) : svgWidth;
   const minuteTicks: { ts: number; label: string }[] = [];
-  let t2 = Math.floor(chartBounds.start / 60000) * 60000;
+  let tickTime = Math.floor(chartBounds.start / 60000) * 60000;
 
-  while (t2 <= chartBounds.end) {
+  while (tickTime <= chartBounds.end) {
     minuteTicks.push({
-      ts: t2,
-      label: new Date(t2).toLocaleTimeString([], {
+      ts: tickTime,
+      label: new Date(tickTime).toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
       }),
     });
-    t2 += 60000;
+    tickTime += 60000;
   }
 
   // -------------------------------

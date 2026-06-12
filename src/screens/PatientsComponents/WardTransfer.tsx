@@ -57,12 +57,12 @@ const WardTransfer: React.FC<WardTransferProps> = ({
   const handleProceed = async () => {
     try {
         if (selectedDevices.length > 0) {
-        Alert.alert(t(‘monitoring.active’), t(‘ward_transfer_modal.stop_devices_msg’));
+        Alert.alert(t('monitoring.active'), t('ward_transfer_modal.stop_devices_msg'));
         return;
       }
       if (selectedTab === "WardTransfer") {
         if (!selectedWard || !selectedBed) {
-          Alert.alert(t(‘common.error’), t(‘ward_transfer_modal.error_select_ward_bed’));
+          Alert.alert(t('common.error'), t('ward_transfer_modal.error_select_ward_bed'));
           return;
         }
 
@@ -73,17 +73,17 @@ const WardTransfer: React.FC<WardTransferProps> = ({
         };
 
         const res = await wardtransfer(payload);
-        Alert.alert(t(‘common.success’), t(‘ward_transfer_modal.success_transfer’));
+        Alert.alert(t('common.success'), t('ward_transfer_modal.success_transfer'));
         console.log("Ward transfer success:", res);
 
       } else if (selectedTab === "Discharge") {
         const res = await dischargePatient({ patientCode, currentBedCode });
-        Alert.alert(t(‘common.success’), t(‘ward_transfer_modal.success_discharge’));
+        Alert.alert(t('common.success'), t('ward_transfer_modal.success_discharge'));
         console.log("Discharge success:", res);
       }
     } catch (err: any) {
       console.error("Error on proceed:", err);
-      Alert.alert(t(‘common.error’), err.message || t(‘common.something_went_wrong’));
+      Alert.alert(t('common.error'), err.message || t('common.something_went_wrong'));
     }
   };
 

@@ -366,7 +366,7 @@ const emailInstructionStyle = useMemo(
             </View>
             <View style={styles.resendContainer}>
               <Text style={resendTextStyle}>
-                {t(‘otp.didnt_receive’)}
+                {t('otp.didnt_receive')}
                 <Text
                   style={[
                     resendTextStyle,
