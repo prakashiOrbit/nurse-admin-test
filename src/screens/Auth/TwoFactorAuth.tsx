@@ -364,9 +364,9 @@ const TwoFactorAuth: React.FC = () => {
       if (response.token) {
         await AsyncStorage.setItem('authToken', response.token);
       }
-      await AsyncStorage.setItem('hospitalCode', response.hospitalCode ?? '');
+      await AsyncStorage.setItem('careSiteCode', response.careSiteCode ?? '');
       await AsyncStorage.setItem('userId', response.userData?.userId ?? response.userId ?? '');
-      await AsyncStorage.setItem('hospitalId', response.userData?.hospitalId ?? response.hospitalId ?? '');
+      await AsyncStorage.setItem('careSiteId', response.userData?.careSiteId ?? response.careSiteId ?? '');
       await AsyncStorage.setItem('orgId', response.userData?.orgId ?? response.orgId ?? '');
       await AsyncStorage.setItem('firstName', response.userData?.firstName ?? response.firstName ?? '');
       await AsyncStorage.setItem('lastName', response.userData?.lastName ?? response.lastName ?? '');

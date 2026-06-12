@@ -77,7 +77,7 @@ const LoginScreen = () => {
         </View>
 
         <View style={styles.rightPanel}>
-          <Image source={require('../../../assets/images/hospital_logo.jpg')} style={styles.logo} />
+          <Image source={require('../../../assets/images/caresite_logo.jpg')} style={styles.logo} />
           <Text style={styles.welcomeText}>{t('auth.welcome_to')} ICU Ward B</Text>
 
           <TextInput

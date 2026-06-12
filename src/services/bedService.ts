@@ -2,63 +2,63 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getCommonData } from './authService';
 import { privateApi } from './privateApi';
 
-// GET /api/{orgName}/bed/{hospCode}/{bedCode}/devicesassignedForNurse
+// GET /api/{orgName}/bed/{careSiteCode}/{bedCode}/devicesassignedForNurse
 export const assignedDevices = async (bedCode: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/bed/${hospitalCode}/${bedCode}/devicesassignedForNurse`,
+    `/${orgName}/bed/${careSiteCode}/${bedCode}/devicesassignedForNurse`,
   );
   return response.data;
 };
 
-// GET /api/{orgName}/bed/{hospCode}/medical-history/{patientCode}
+// GET /api/{orgName}/bed/{careSiteCode}/medical-history/{patientCode}
 export const getMedicalHistory = async (patientCode: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/bed/${hospitalCode}/medical-history/${patientCode}`,
+    `/${orgName}/bed/${careSiteCode}/medical-history/${patientCode}`,
   );
   return response.data;
 };
 
-// GET /api/{orgName}/bed/{hospCode}/getAllBeds/{wardCode}
+// GET /api/{orgName}/bed/{careSiteCode}/getAllBeds/{wardCode}
 export const getAllEmptyBeds = async (wardCode: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/bed/${hospitalCode}/getAllBeds/${wardCode}`,
+    `/${orgName}/bed/${careSiteCode}/getAllBeds/${wardCode}`,
   );
   return response.data;
 };
 
-// GET /api/{orgName}/instruction/{hospCode}/patient/{patientCode}/instructions
+// GET /api/{orgName}/instruction/{careSiteCode}/patient/{patientCode}/instructions
 export const getPatientInstructions = async (patientCode: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/instruction/${hospitalCode}/patient/${patientCode}/instructions`,
+    `/${orgName}/instruction/${careSiteCode}/patient/${patientCode}/instructions`,
   );
   return response.data;
 };
 
-// POST /api/{orgName}/bed/{hospCode}/patient/discharge
+// POST /api/{orgName}/bed/{careSiteCode}/patient/discharge
 export const dischargePatient = async (data: { patientCode: string; bedCode: string }) => {
   const { orgName, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/bed/${hospitalCode}/patient/discharge`,
+    `/${orgName}/bed/${careSiteCode}/patient/discharge`,
     { patientCode: data.patientCode, bedCode: data.bedCode, wardCode },
   );
   return response.data;
 };
 
-// POST /api/{orgName}/bed/{hospCode}/patient/wardTransfer
+// POST /api/{orgName}/bed/{careSiteCode}/patient/wardTransfer
 export const wardTransferPatient = async (data: { patientCode: string; bedCode: string }) => {
   const { orgName, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/bed/${hospitalCode}/patient/wardTransfer`,
+    `/${orgName}/bed/${careSiteCode}/patient/wardTransfer`,
     { patientCode: data.patientCode, bedCode: data.bedCode, wardCode },
   );
   return response.data;

@@ -2,79 +2,79 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getCommonData } from './authService';
 import { privateApi } from './privateApi';
 
-// GET /api/{orgName}/bed/{hospCode}/{bedCode}/devicesassigned
+// GET /api/{orgName}/bed/{careSiteCode}/{bedCode}/devicesassigned
 export const getAssignedDevicesAPI = async (bedCode: string) => {
-  const { orgName, hospitalCode } = await getCommonData();
+  const { orgName, careSiteCode } = await getCommonData();
   const response = await privateApi.get(
-    `/${orgName}/bed/${hospitalCode}/${bedCode}/devicesassigned`,
+    `/${orgName}/bed/${careSiteCode}/${bedCode}/devicesassigned`,
   );
   const deviceCodes = response.data.map((item: any) => item.deviceCode);
   return deviceCodes;
 };
 
-// POST /api/{orgName}/events/{hospCode}/start
+// POST /api/{orgName}/events/{careSiteCode}/start
 export const startMonitoring = async (data: { deviceCode: string }) => {
-  const { orgName, hospitalCode } = await getCommonData();
-  const response = await privateApi.post(`/${orgName}/events/${hospitalCode}/start`, {
+  const { orgName, careSiteCode } = await getCommonData();
+  const response = await privateApi.post(`/${orgName}/events/${careSiteCode}/start`, {
     deviceCode: data.deviceCode,
   });
   return response.data;
 };
 
-// POST /api/{orgName}/events/{hospCode}/stop
+// POST /api/{orgName}/events/{careSiteCode}/stop
 export const stopMonitoring = async (data: { deviceCode: string }) => {
-  const { orgName, hospitalCode } = await getCommonData();
-  const response = await privateApi.post(`/${orgName}/events/${hospitalCode}/stop`, {
+  const { orgName, careSiteCode } = await getCommonData();
+  const response = await privateApi.post(`/${orgName}/events/${careSiteCode}/stop`, {
     deviceCode: data.deviceCode,
   });
   return response.data;
 };
 
-// GET /api/{orgName}/events/{hospCode}/{deviceCode}/{patientCode}/status
+// GET /api/{orgName}/events/{careSiteCode}/{deviceCode}/{patientCode}/status
 export const checkMonitoring = async (deviceCode: string, patientCode: string) => {
-  const { orgName, hospitalCode } = await getCommonData();
+  const { orgName, careSiteCode } = await getCommonData();
   const response = await privateApi.get(
-    `/${orgName}/events/${hospitalCode}/${deviceCode}/${patientCode}/status`,
+    `/${orgName}/events/${careSiteCode}/${deviceCode}/${patientCode}/status`,
   );
   return response.data;
 };
 
-// GET /api/{orgName}/device/{hospCode}/{deviceId}/getParameter
+// GET /api/{orgName}/device/{careSiteCode}/{deviceId}/getParameter
 export const getDeviceConfigAPI = async (deviceId: string) => {
-  const { orgName, hospitalCode } = await getCommonData();
+  const { orgName, careSiteCode } = await getCommonData();
   const response = await privateApi.get(
-    `/${orgName}/device/${hospitalCode}/${deviceId}/getParameter`,
+    `/${orgName}/device/${careSiteCode}/${deviceId}/getParameter`,
   );
   return response.data;
 };
 
-// POST /api/{orgName}/device/{hospCode}/patient/{patientId}/config  (backend gap)
+// POST /api/{orgName}/device/{careSiteCode}/patient/{patientId}/config  (backend gap)
 export const patientConfig = async (patientId: string, deviceType: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/device/${hospitalCode}/patient/${patientId}/config`,
+    `/${orgName}/device/${careSiteCode}/patient/${patientId}/config`,
     { deviceType },
   );
   return response.data;
 };
 
-// GET /api/{orgName}/device/{hospCode}/{deviceType}/default-config  (backend gap)
+// GET /api/{orgName}/device/{careSiteCode}/{deviceType}/default-config  (backend gap)
 export const patientDefaultConfig = async (deviceType: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/device/${hospitalCode}/${deviceType}/default-config`,
+    `/${orgName}/device/${careSiteCode}/${deviceType}/default-config`,
   );
   return response.data;
 };
 
-// POST /api/{orgName}/device/{hospCode}/patient/{patientId}/{deviceType}/config/update
+// POST /api/{orgName}/device/{careSiteCode}/patient/{patientId}/{deviceType}/config/update
 export const updatePatientConfig = async (patientId: string, deviceType: string, payload: Record<string, string>) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/device/${hospitalCode}/patient/${patientId}/${deviceType}/config/update`,
+    `/${orgName}/device/${careSiteCode}/patient/${patientId}/${deviceType}/config/update`,
     payload,
   );
   return response.data;

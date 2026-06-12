@@ -16,12 +16,12 @@ export const getCommonData = async (forceRefresh = false) => {
 
   const orgName = await AsyncStorage.getItem('orgName');
   const userName = await AsyncStorage.getItem('userName');
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const nurseCode = await AsyncStorage.getItem('nurseCode');
   const wardCode = await AsyncStorage.getItem('wardCode');
   const shiftCode = await AsyncStorage.getItem('shiftCode');
 
-  commonDataCache = { orgName, userName, hospitalCode, nurseCode, wardCode, shiftCode };
+  commonDataCache = { orgName, userName, careSiteCode, nurseCode, wardCode, shiftCode };
   lastCacheTime = now;
   return commonDataCache;
 };
@@ -71,12 +71,12 @@ export const loginNurseWithGoogle = async (idToken: string) => {
   }
 };
 
-// POST /api/{orgName}/{hospitalCode}/user/{userName}/verify2fa  (issues JWT)
+// POST /api/{orgName}/{careSiteCode}/user/{userName}/verify2fa  (issues JWT)
 export const verify2faAPI = async (otp: string) => {
   try {
-    const { orgName, userName, hospitalCode } = await getCommonData();
-    const url = hospitalCode
-      ? `/${orgName}/${hospitalCode}/user/${userName}/verify2fa`
+    const { orgName, userName, careSiteCode } = await getCommonData();
+    const url = careSiteCode
+      ? `/${orgName}/${careSiteCode}/user/${userName}/verify2fa`
       : `/${orgName}/user/${userName}/verify2fa`;
     const response = await publicApi.post(url, { otpCode: otp });
     return response.data;
@@ -88,9 +88,9 @@ export const verify2faAPI = async (otp: string) => {
 // POST /api/{orgName}/user/{userName}/verification  (1FA email OTP)
 export const verifyFirstFactorAPI = async (otp: string) => {
   try {
-    const { orgName, userName, hospitalCode } = await getCommonData();
-    const url = hospitalCode
-      ? `/${orgName}/${hospitalCode}/user/${userName}/verification`
+    const { orgName, userName, careSiteCode } = await getCommonData();
+    const url = careSiteCode
+      ? `/${orgName}/${careSiteCode}/user/${userName}/verification`
       : `/${orgName}/user/${userName}/verification`;
     const response = await publicApi.post(url, { otpCode: otp });
     return response.data;
@@ -162,13 +162,13 @@ export const resetPasswordAPI = async (payload: {
   }
 };
 
-// GET /api/{orgName}/nurse/{hospitalCode}/nursedetail/{userName}
+// GET /api/{orgName}/nurse/{careSiteCode}/nursedetail/{userName}
 export const getNurseDetails = async () => {
   try {
     const { orgName, userName } = await getCommonData();
-    const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+    const careSiteCode = await AsyncStorage.getItem('careSiteCode');
     const response = await privateApi.get(
-      `/${orgName}/nurse/${hospitalCode}/nursedetail/${userName}`,
+      `/${orgName}/nurse/${careSiteCode}/nursedetail/${userName}`,
     );
     if (response.data?.nurseCode) {
       await AsyncStorage.setItem('nurseCode', response.data.nurseCode);
@@ -182,13 +182,13 @@ export const getNurseDetails = async () => {
   }
 };
 
-// POST /api/{orgName}/nurse/{hospitalCode}/{userName}/createfcmtoken
+// POST /api/{orgName}/nurse/{careSiteCode}/{userName}/createfcmtoken
 export const getAndCreateFcmTokenAPI = async (data: any) => {
   try {
     const { orgName, userName } = await getCommonData();
-    const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+    const careSiteCode = await AsyncStorage.getItem('careSiteCode');
     const response = await privateApi.post(
-      `/${orgName}/nurse/${hospitalCode}/${userName}/createfcmtoken`,
+      `/${orgName}/nurse/${careSiteCode}/${userName}/createfcmtoken`,
       data,
     );
     return response.data;
@@ -197,7 +197,7 @@ export const getAndCreateFcmTokenAPI = async (data: any) => {
   }
 };
 
-// POST /api/{orgName}/nurse/{hospitalCode}/{userName}/createnote
+// POST /api/{orgName}/nurse/{careSiteCode}/{userName}/createnote
 export const createNurseNoteAPI = async (noteText: {
   objectId: string;
   objectType: string;
@@ -206,9 +206,9 @@ export const createNurseNoteAPI = async (noteText: {
 }) => {
   try {
     const { orgName, userName } = await getCommonData();
-    const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+    const careSiteCode = await AsyncStorage.getItem('careSiteCode');
     const response = await privateApi.post(
-      `/${orgName}/nurse/${hospitalCode}/${userName}/createnote`,
+      `/${orgName}/nurse/${careSiteCode}/${userName}/createnote`,
       {
         objectId: noteText.objectId,
         objectType: noteText.objectType,

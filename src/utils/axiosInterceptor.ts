@@ -41,7 +41,7 @@ export const setupAxiosInterceptors = () => {
                 'authToken',
                 'userName',
                 'orgName',
-                'hospitalCode',
+                'careSiteCode',
                 'wardCode',
                 'isAuthenticated',
               ]);

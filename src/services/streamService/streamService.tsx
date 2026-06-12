@@ -6,16 +6,16 @@ import { getCommonData } from '../authService';
 const BASE_URL = Config.API_BASE_URL;
 
 export const createDashboardStream = async () => {
-  const { orgName, hospitalCode, nurseCode, shiftCode, wardCode } =
+  const { orgName, careSiteCode, nurseCode, shiftCode, wardCode } =
     await getCommonData();
   const authToken = await AsyncStorage.getItem('authToken');
 
-  if (!orgName || !hospitalCode || !nurseCode || !wardCode || !authToken) {
+  if (!orgName || !careSiteCode || !nurseCode || !wardCode || !authToken) {
     throw new Error('Missing session context');
   }
 
   const url =
-    `${BASE_URL}/${orgName}/nurse/${hospitalCode}/dashboard/stream` +
+    `${BASE_URL}/${orgName}/nurse/${careSiteCode}/dashboard/stream` +
     `?nurseCode=${nurseCode}` +
     `&shiftCode=${shiftCode ?? ''}` +
     `&wardCode=${wardCode}`;

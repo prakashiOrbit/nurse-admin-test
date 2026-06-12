@@ -44,9 +44,9 @@ const TwoFactorAuth = () => {
       const response = await verify2faAPI(otp);
       console.log('OTP Verification Response:', response);
 
-        await AsyncStorage.setItem('hospitalCode', response.hospitalCode);
+        await AsyncStorage.setItem('careSiteCode', response.careSiteCode);
         await AsyncStorage.setItem('userId', response.userId);
-        await AsyncStorage.setItem('hospitalId', response.hospitalId);
+        await AsyncStorage.setItem('careSiteId', response.careSiteId);
         await AsyncStorage.setItem('orgId', response.orgId);
         await AsyncStorage.setItem('firstName', response.firstName);
         await AsyncStorage.setItem('lastName', response.lastName);
@@ -86,7 +86,7 @@ const TwoFactorAuth = () => {
       </View>
 
       <View style={styles.rightPanel}>
-        <Image source={require('../../../assets/images/hospital_logo.jpg')} style={styles.logo} />
+        <Image source={require('../../../assets/images/caresite_logo.jpg')} style={styles.logo} />
         <Text style={styles.welcomeText}>Enter OTP to Continue</Text>
 
         <TextInput

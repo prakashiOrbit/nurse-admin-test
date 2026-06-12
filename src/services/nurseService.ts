@@ -2,33 +2,33 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getCommonData } from './authService';
 import { privateApi } from './privateApi';
 
-// GET /api/{orgName}/svg/{hospCode}/{wardCode}
+// GET /api/{orgName}/svg/{careSiteCode}/{wardCode}
 export const getWardSVG = async () => {
   const { orgName, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/svg/${hospitalCode}/${wardCode}`,
+    `/${orgName}/svg/${careSiteCode}/${wardCode}`,
   );
   return response.data;
 };
 
-// GET /api/{orgName}/nurse/{hospCode}/bedpatientinfo/{wardCode}/{bedCode}
+// GET /api/{orgName}/nurse/{careSiteCode}/bedpatientinfo/{wardCode}/{bedCode}
 export const getBedPatientInfo = async (bedCode: string) => {
   const { orgName, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/nurse/${hospitalCode}/bedpatientinfo/${wardCode}/${bedCode}`,
+    `/${orgName}/nurse/${careSiteCode}/bedpatientinfo/${wardCode}/${bedCode}`,
   );
   return response.data;
 };
 
-// GET /api/{orgName}/nurse/{hospCode}/getnursecurrentshift/{nurseCode}
+// GET /api/{orgName}/nurse/{careSiteCode}/getnursecurrentshift/{nurseCode}
 export const getCurrentShift = async () => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const nurseCode = await AsyncStorage.getItem('nurseCode');
   const response = await privateApi.get(
-    `/${orgName}/nurse/${hospitalCode}/getnursecurrentshift/${nurseCode}`,
+    `/${orgName}/nurse/${careSiteCode}/getnursecurrentshift/${nurseCode}`,
   );
   if (response.data?.shiftCode) {
     await AsyncStorage.setItem('shiftCode', response.data.shiftCode);
@@ -39,12 +39,12 @@ export const getCurrentShift = async () => {
   return response.data;
 };
 
-// GET /api/{orgName}/nurse/{hospCode}/getcurrentshift/{wardCode}
+// GET /api/{orgName}/nurse/{careSiteCode}/getcurrentshift/{wardCode}
 export const getCurrentShiftForNurse = async () => {
   const { orgName, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/nurse/${hospitalCode}/getcurrentshift/${wardCode}`,
+    `/${orgName}/nurse/${careSiteCode}/getcurrentshift/${wardCode}`,
   );
   if (response.data?.shiftCode) {
     await AsyncStorage.setItem('shiftCode', response.data.shiftCode);
@@ -52,28 +52,28 @@ export const getCurrentShiftForNurse = async () => {
   return response.data;
 };
 
-// POST /api/{orgName}/nurse/{hospCode}/assignedbedpatients
+// POST /api/{orgName}/nurse/{careSiteCode}/assignedbedpatients
 export const getAssignedBeds = async () => {
   const { orgName, nurseCode, wardCode, shiftCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/nurse/${hospitalCode}/assignedbedpatients`,
+    `/${orgName}/nurse/${careSiteCode}/assignedbedpatients`,
     { nurseCode, wardCode, shiftCode },
   );
   return response.data;
 };
 
-// GET /api/{orgName}/nurse/{hospCode}/getcurrentshiftnurses/{shiftCode}/{wardCode}
+// GET /api/{orgName}/nurse/{careSiteCode}/getcurrentshiftnurses/{shiftCode}/{wardCode}
 export const getCurrentShiftNurses = async () => {
   const { orgName, wardCode, shiftCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/nurse/${hospitalCode}/getcurrentshiftnurses/${shiftCode}/${wardCode}`,
+    `/${orgName}/nurse/${careSiteCode}/getcurrentshiftnurses/${shiftCode}/${wardCode}`,
   );
   return response.data;
 };
 
-// POST /api/{orgName}/nurse/{hospCode}/delegatePatient
+// POST /api/{orgName}/nurse/{careSiteCode}/delegatePatient
 export const delegatePatient = async (data: {
   shiftCode: string;
   wardCode: string;
@@ -82,9 +82,9 @@ export const delegatePatient = async (data: {
   newNurseCode: string;
 }) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/nurse/${hospitalCode}/delegatePatient`,
+    `/${orgName}/nurse/${careSiteCode}/delegatePatient`,
     {
       shiftCode: data.shiftCode,
       wardCode: data.wardCode,
@@ -96,22 +96,22 @@ export const delegatePatient = async (data: {
   return response.data;
 };
 
-// GET /api/{orgName}/nurse/{hospCode}/getemptybeds/{wardCode}
+// GET /api/{orgName}/nurse/{careSiteCode}/getemptybeds/{wardCode}
 export const getEmptyBeds = async () => {
   const { orgName, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/nurse/${hospitalCode}/getemptybeds/${wardCode}`,
+    `/${orgName}/nurse/${careSiteCode}/getemptybeds/${wardCode}`,
   );
   return response.data;
 };
 
-// POST /api/{orgName}/nurse/{hospCode}/getAssignedNursesAndDoctors
+// POST /api/{orgName}/nurse/{careSiteCode}/getAssignedNursesAndDoctors
 export const getAssignedNursesAndDoctors = async (bedCode: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/nurse/${hospitalCode}/getAssignedNursesAndDoctors`,
+    `/${orgName}/nurse/${careSiteCode}/getAssignedNursesAndDoctors`,
     {
       bedCode,
       wardCode: await AsyncStorage.getItem('wardCode'),
@@ -121,32 +121,32 @@ export const getAssignedNursesAndDoctors = async (bedCode: string) => {
   return response.data;
 };
 
-// GET /api/{orgName}/nurse/{hospCode}/allWards
+// GET /api/{orgName}/nurse/{careSiteCode}/allWards
 export const getAllWards = async () => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/nurse/${hospitalCode}/allWards`,
+    `/${orgName}/nurse/${careSiteCode}/allWards`,
   );
   return response.data;
 };
 
-// POST /api/{orgName}/nurse/{hospCode}/assignedBedForAdmit  (backend gap)
+// POST /api/{orgName}/nurse/{careSiteCode}/assignedBedForAdmit  (backend gap)
 export const admitPatientForBed = async () => {
   const { orgName, nurseCode, wardCode, shiftCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/nurse/${hospitalCode}/assignedBedForAdmit`,
+    `/${orgName}/nurse/${careSiteCode}/assignedBedForAdmit`,
     { nurseCode, wardCode, shiftCode },
   );
   return response.data;
 };
 
-// POST /api/{orgName}/nurse/{hospCode}/admit
+// POST /api/{orgName}/nurse/{careSiteCode}/admit
 export const admitPatient = async (data: { patientCode: string; bedCode: string }) => {
   const { orgName, nurseCode, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
-  const response = await privateApi.post(`/${orgName}/nurse/${hospitalCode}/admit`, {
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
+  const response = await privateApi.post(`/${orgName}/nurse/${careSiteCode}/admit`, {
     patientCode: data.patientCode,
     nurseCode,
     wardCode,
@@ -155,54 +155,54 @@ export const admitPatient = async (data: { patientCode: string; bedCode: string 
   return response.data;
 };
 
-// POST /api/{orgName}/nurse/{hospCode}/assignedBedForWardTransfer  (backend gap)
+// POST /api/{orgName}/nurse/{careSiteCode}/assignedBedForWardTransfer  (backend gap)
 export const getWardTransferBeds = async () => {
   const { orgName, nurseCode, wardCode, shiftCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/nurse/${hospitalCode}/assignedBedForWardTransfer`,
+    `/${orgName}/nurse/${careSiteCode}/assignedBedForWardTransfer`,
     { nurseCode, wardCode, shiftCode },
   );
   return response.data;
 };
 
-// POST /api/{orgName}/nurse/{hospCode}/assignedBedForDischarge  (backend gap)
+// POST /api/{orgName}/nurse/{careSiteCode}/assignedBedForDischarge  (backend gap)
 export const getDischargeBeds = async () => {
   const { orgName, nurseCode, wardCode, shiftCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/nurse/${hospitalCode}/assignedBedForDischarge`,
+    `/${orgName}/nurse/${careSiteCode}/assignedBedForDischarge`,
     { nurseCode, wardCode, shiftCode },
   );
   return response.data;
 };
 
-// POST /api/{orgName}/device/{hospCode}/patient/{patientId}/assign-default-alarm/{deviceCode}
+// POST /api/{orgName}/device/{careSiteCode}/patient/{patientId}/assign-default-alarm/{deviceCode}
 export const assignDefaultAlarm = async (data: { deviceCode: string; patientId: string }) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/device/${hospitalCode}/patient/${data.patientId}/assign-default-alarm/${data.deviceCode}`,
+    `/${orgName}/device/${careSiteCode}/patient/${data.patientId}/assign-default-alarm/${data.deviceCode}`,
   );
   return response.data;
 };
 
-// GET /api/{orgName}/ward-dashboard/{hospCode}/{wardCode}
+// GET /api/{orgName}/ward-dashboard/{careSiteCode}/{wardCode}
 export const getDashboardData = async () => {
   const { orgName, wardCode } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.get(
-    `/${orgName}/ward-dashboard/${hospitalCode}/${wardCode}`,
+    `/${orgName}/ward-dashboard/${careSiteCode}/${wardCode}`,
   );
   return response.data;
 };
 
-// POST /api/{orgName}/notifications/{hospCode}/acknowledge
+// POST /api/{orgName}/notifications/{careSiteCode}/acknowledge
 export const acknowledgeNotification = async (notificationId: string) => {
   const { orgName } = await getCommonData();
-  const hospitalCode = await AsyncStorage.getItem('hospitalCode');
+  const careSiteCode = await AsyncStorage.getItem('careSiteCode');
   const response = await privateApi.post(
-    `/${orgName}/notifications/${hospitalCode}/acknowledge`,
+    `/${orgName}/notifications/${careSiteCode}/acknowledge`,
     { notificationId },
   );
   return response.data;

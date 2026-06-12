@@ -9,12 +9,12 @@ export const getVitalRecordsAPI = async (payload: {
   startTime: string;
   endTime: string;
 }) => {
-  const { orgName, userName, hospitalCode } = await getCommonData();
+  const { orgName, userName, careSiteCode } = await getCommonData();
   const response = await privateApi.post(`/${orgName}/telemetry/vitaldata`, {
     ...payload,
     orgName,
     userName,
-    hospitalCode,
+    careSiteCode,
   });
   return response.data;
 };
@@ -25,22 +25,22 @@ export const getVitalRecordsAPIForMonitoring = async (payload: {
   deviceCode: string;
   vitalParams: string[];
 }) => {
-  const { orgName, userName, hospitalCode } = await getCommonData();
+  const { orgName, userName, careSiteCode } = await getCommonData();
   const response = await privateApi.post(`/${orgName}/telemetry/vitaldata`, {
     ...payload,
     orgName,
     userName,
-    hospitalCode,
+    careSiteCode,
   });
   return response.data;
 };
 
-// GET /api/{orgName}/data/{hospCode}/{userName}/{deviceCode}/{bedCode}/vitaldata
+// GET /api/{orgName}/data/{careSiteCode}/{userName}/{deviceCode}/{bedCode}/vitaldata
 // NOTE: no matching endpoint in current backend — kept for backward compat
 export const getVitalDataAPI = async (deviceCode: string, bedCode: string) => {
-  const { orgName, hospitalCode, userName } = await getCommonData();
+  const { orgName, careSiteCode, userName } = await getCommonData();
   const response = await privateApi.get(
-    `/${orgName}/data/${hospitalCode}/${userName}/${deviceCode}/${bedCode}/vitaldata`,
+    `/${orgName}/data/${careSiteCode}/${userName}/${deviceCode}/${bedCode}/vitaldata`,
   );
   return response.data;
 };
