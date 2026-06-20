@@ -18,6 +18,11 @@ import type { RootStackParamList } from '../../navigation/AppNavigator';
 import { fontScale, scale, verticalScale } from '../../utils/scaling';
 import { getNurseDetails } from '../../services/authService';
 import { AUTH_FLOW, clearAuthSession } from '../../services/sessionService';
+import {
+  authenticateWithBiometric,
+  isBiometricEnrolled,
+  revokeBiometric,
+} from '../../services/biometricService';
 import { setupNotifications } from '../../utils/notification';
 
 const splashBackground = require('../../../assets/images/NurseInWard.png');
@@ -48,26 +53,44 @@ const SplashScreen = () => {
 
     const checkAuth = async (): Promise<SplashDestination> => {
       try {
+        // Biometric path: enrolled users skip password entirely
+        const enrolled = await isBiometricEnrolled();
+        if (enrolled) {
+          const token = await authenticateWithBiometric(
+            'Sign in to iTouch Nurse',
+            'Use Password',
+          );
+          if (token) {
+            await AsyncStorage.setItem('authToken', token);
+            try {
+              await getNurseDetails();
+              return 'Dashboard';
+            } catch {
+              // Stored token is expired — revoke enrollment, force fresh login
+              await revokeBiometric();
+              await clearAuthSession();
+              return 'NurseLogin';
+            }
+          }
+          // User cancelled biometric prompt → fall through to password login
+          return 'NurseLogin';
+        }
+
+        // Non-biometric path: standard token validation
         const authToken = await AsyncStorage.getItem('authToken');
         const authFlow = await AsyncStorage.getItem('authFlow');
 
-        // No token → go to login
         if (!authToken) return 'NurseLogin';
 
-        // Not fully authenticated → clear
         if (authFlow !== AUTH_FLOW.AUTHENTICATED) {
           await clearAuthSession();
           return 'NurseLogin';
         }
 
-        // CRITICAL: Validate with server
         try {
-          await getNurseDetails(); // acts as session validation
+          await getNurseDetails();
           return 'Dashboard';
-        } catch (error) {
-          console.log('Session invalid or server restarted');
-
-          // Token invalid → clear everything
+        } catch {
           await clearAuthSession();
           return 'NurseLogin';
         }

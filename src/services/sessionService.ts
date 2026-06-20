@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { clearCommonDataCache } from './authService';
+import { revokeBiometric } from './biometricService';
 
 export const AUTH_KEYS = [
   'userName',
@@ -22,6 +23,7 @@ export const AUTH_KEYS = [
 
 export const clearAuthSession = async () => {
   await AsyncStorage.multiRemove(AUTH_KEYS);
+  await revokeBiometric();
   clearCommonDataCache();
 };
 

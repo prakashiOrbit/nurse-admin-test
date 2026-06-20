@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -23,7 +23,14 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { scale, verticalScale } from '../../utils/scaling';
-import { loginNurse } from '../../services/authService';
+import { getNurseDetails, loginNurse } from '../../services/authService';
+import {
+  authenticateWithBiometric,
+  getBiometricCapability,
+  isBiometricEnrolled,
+  revokeBiometric,
+  type BiometricCapability,
+} from '../../services/biometricService';
 import { useResponsive } from '../../utils/responsive';
 import { Icon, Images } from '../../../assets';
 import { RootStackParamList } from '../../navigation/AppNavigator';
@@ -255,7 +262,48 @@ const EmailLoginScreen = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(true);
+  const [biometricType, setBiometricType] = useState<BiometricCapability>('none');
   const passwordInputRef = useRef<TextInput>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const checkBiometric = async () => {
+        const enrolled = await isBiometricEnrolled();
+        if (!enrolled) {
+          setBiometricType('none');
+          return;
+        }
+        const cap = await getBiometricCapability();
+        setBiometricType(cap);
+      };
+      checkBiometric();
+    }, []),
+  );
+
+  const handleBiometricLogin = async () => {
+    const label = biometricType === 'face' ? 'Face ID' : 'Fingerprint';
+    const token = await authenticateWithBiometric(
+      `Sign in with ${label}`,
+      'Use Password',
+    );
+    if (!token) return;
+
+    try {
+      await AsyncStorage.setItem('authToken', token);
+      const nurseDetail = await getNurseDetails();
+      await AsyncStorage.setItem('nurseDetails', JSON.stringify(nurseDetail));
+      navigation.reset({ index: 0, routes: [{ name: 'Dashboard' }] });
+    } catch {
+      await revokeBiometric();
+      await AsyncStorage.removeItem('authToken');
+      setBiometricType('none');
+      Toast.show({
+        type: 'error',
+        text1: 'Session Expired',
+        text2: 'Please log in with your email and password.',
+      });
+    }
+  };
 
   const appLogo = require('../../../assets/images/nurse_img.png');
   const backButton = require('../../../assets/icons/back-arrow2.png');
@@ -503,6 +551,19 @@ const EmailLoginScreen = () => {
                   {loading ? t('auth.please_wait') : t('auth.get_otp')}
                 </Text>
               </TouchableOpacity>
+              {biometricType !== 'none' && (
+                <TouchableOpacity
+                  style={[styles.biometricButton, { borderRadius: isTablet ? 14 : scale(10) }]}
+                  onPress={handleBiometricLogin}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.biometricText, { fontSize: RFValue(isTablet ? 15 : 13, 812) }]}>
+                    {biometricType === 'face'
+                      ? 'Sign in with Face ID'
+                      : 'Sign in with Fingerprint'}
+                  </Text>
+                </TouchableOpacity>
+              )}
               {/* <TouchableOpacity
                 style={googleButtonStyle}
                 onPress={() => {
@@ -638,6 +699,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   googleIconStyle: { width: 20, height: 20, marginRight: 10 },
+  biometricButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1.5,
+    borderColor: '#4CAF50',
+    paddingVertical: 10,
+    marginTop: 8,
+  },
+  biometricText: {
+    color: '#4CAF50',
+    fontWeight: '600',
+  },
   globeBtn: {
     position: 'absolute',
     top: verticalScale(30),

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  Alert,
   View,
   Text,
   TextInput,
@@ -29,6 +30,11 @@ import { RootStackParamList } from '../../navigation/AppNavigator';
 import { Icon, Images } from '../../../assets';
 import { useResponsive } from '../../utils/responsive';
 import Toast from 'react-native-toast-message';
+import {
+  enrollBiometric,
+  getBiometricCapability,
+  isBiometricEnrolled,
+} from '../../services/biometricService';
 
 type TwoFactorRouteProp = RouteProp<RootStackParamList, 'TwoFactorAuth'>;
 
@@ -397,10 +403,39 @@ const TwoFactorAuth: React.FC = () => {
       }
 
       setError('');
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Dashboard' }],
-      });
+
+      const navigateToDashboard = () =>
+        navigation.reset({ index: 0, routes: [{ name: 'Dashboard' }] });
+
+      const capability = await getBiometricCapability();
+      const alreadyEnrolled = await isBiometricEnrolled();
+
+      if (capability !== 'none' && !alreadyEnrolled && response.token) {
+        const label = capability === 'face' ? 'Face ID' : 'Fingerprint';
+        const storedUsername =
+          (await AsyncStorage.getItem('userName')) ?? '';
+        Alert.alert(
+          `Enable ${label} Login`,
+          `Log in faster next time using ${label}. You can disable this by logging out.`,
+          [
+            {
+              text: 'Not Now',
+              style: 'cancel',
+              onPress: navigateToDashboard,
+            },
+            {
+              text: 'Enable',
+              onPress: async () => {
+                await enrollBiometric(storedUsername, response.token);
+                navigateToDashboard();
+              },
+            },
+          ],
+          { cancelable: false },
+        );
+      } else {
+        navigateToDashboard();
+      }
     } catch (err: any) {
       const message = err?.response?.data?.message || err?.response?.data || '';
 
